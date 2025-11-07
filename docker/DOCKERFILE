@@ -5,13 +5,14 @@ USER root
 RUN apt update \
     && apt install -y \
     bash \
-    sudo \
+    ca-certificates \
     curl \
     git \
+    gnome-terminal \
+    gnupg \
     nodejs \
     npm \
-    ca-certificates \
-    gnupg \
+    sudo \
     && apt clean \
     && rm -rf /var/lib/apt/lists/*
 
