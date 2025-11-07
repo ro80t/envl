@@ -10,6 +10,7 @@ RUN apt update \
     git \
     gnome-terminal \
     gnupg \
+    nano \
     nodejs \
     npm \
     sudo \
