@@ -13,6 +13,7 @@
                 "ms-vscode-remote.remote-containers",
                 "ms-vscode.vscode-typescript-next",
                 "rust-lang.rust-analyzer",
+                "tamasfe.even-better-toml",
                 "vadimcn.vscode-lldb"
             ]
         }
