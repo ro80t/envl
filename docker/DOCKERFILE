@@ -4,6 +4,7 @@ USER root
 
 RUN apt update \
     && apt install -y \
+    bash \
     sudo \
     curl \
     git \
