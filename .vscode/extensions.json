@@ -1,12 +1,15 @@
 {
     "recommendations": [
+        "dbaeumer.vscode-eslint",
         "docker.docker",
         "dustypomerleau.rust-syntax",
+        "esbenp.prettier-vscode",
         "github.vscode-github-actions",
         "ms-azuretools.vscode-docker",
         "ms-vscode-remote.remote-containers",
         "ms-vscode.vscode-typescript-next",
         "rust-lang.rust-analyzer",
+        "rvest.vs-code-prettier-eslint",
         "tamasfe.even-better-toml",
         "vadimcn.vscode-lldb"
     ]
