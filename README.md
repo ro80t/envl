@@ -2,8 +2,8 @@
 
 ## Packages
 
-|language|lib                                  |repository                               |
-|--------|-------------------------------------|-----------------------------------------|
+|language|lib                                  |repository                            |
+|--------|-------------------------------------|--------------------------------------|
 |Rust    |[envl](https://crates.io/crates/envl)|[ROBOTofficial/envl](./packages/envl/)|
 
 ## Cli
