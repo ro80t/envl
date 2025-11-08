@@ -38,3 +38,5 @@ RUN sudo install -m 0755 -d /etc/apt/keyrings \
 
 # Install act
 RUN cd / && curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
+
+ENTRYPOINT [ "/sbin/init" ]
