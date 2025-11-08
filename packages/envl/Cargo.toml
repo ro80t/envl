@@ -10,7 +10,6 @@ rust-version.workspace = true
 [lib]
 
 [dependencies]
-tokio.workspace = true
 envl-config.workspace = true
 envl-vars.workspace = true
 envl-utils.workspace = true
