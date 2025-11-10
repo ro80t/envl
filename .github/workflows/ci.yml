@@ -27,16 +27,16 @@ jobs:
         run: rustup component add clippy rustfmt
 
       - name: Check build
-        run: cargo build --release --verbose
+        run: scripts/build-release.sh
 
       - name: Test
-        run: cargo test --verbose
+        run: scripts/test.sh
 
       - name: Lint with clippy
-        run: cargo clippy --all-targets --all-features
+        run: scripts/lint.sh
 
       - name: Check formatting
-        run: cargo fmt --all --check
+        run: scripts/fmt.sh
 
   devcontainer:
     name: DevContainer
@@ -54,8 +54,4 @@ jobs:
         with:
           cacheFrom: ghcr.io/${{ github.repository }}
           push: never
-          runCmd: |
-            cargo build --release --verbose
-            cargo test --verbose
-            cargo clippy --all-targets --all-features
-            cargo fmt --all --check
+          runCmd: scripts/ci.sh
