@@ -4,7 +4,8 @@ on:
   pull_request:
 
 jobs:
-  rust:
+  envl:
+    name: Build Envl
     runs-on: ubuntu-latest
 
     steps:
@@ -26,13 +27,31 @@ jobs:
         run: rustup component add clippy rustfmt
 
       - name: Check build
-        run: cargo build --release --verbose
+        run: scripts/build-release.sh
 
       - name: Test
-        run: cargo test --verbose
+        run: scripts/test.sh
 
       - name: Lint with clippy
-        run: cargo clippy --all-targets --all-features
+        run: scripts/lint.sh
 
       - name: Check formatting
-        run: cargo fmt --all --check
+        run: scripts/fmt.sh
+
+  devcontainer:
+    name: DevContainer
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      - name: Checkout docker
+        uses: devcontainers/ci@v0.3
+        with:
+          cacheFrom: ghcr.io/${{ github.repository }}
+          push: never
+          runCmd: scripts/ci.sh
