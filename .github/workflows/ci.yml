@@ -4,7 +4,8 @@ on:
   pull_request:
 
 jobs:
-  rust:
+  envl:
+    name: Build Envl
     runs-on: ubuntu-latest
 
     steps:
@@ -36,3 +37,25 @@ jobs:
 
       - name: Check formatting
         run: cargo fmt --all --check
+
+  devcontainer:
+    name: DevContainer
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      - name: Checkout docker
+        uses: devcontainers/ci@v0.3
+        with:
+          cacheFrom: ghcr.io/${{ github.repository }}
+          push: never
+          runCmd: |
+            cargo build --release --verbose
+            cargo test --verbose
+            cargo clippy --all-targets --all-features
+            cargo fmt --all --check
