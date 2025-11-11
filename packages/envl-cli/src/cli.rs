@@ -22,7 +22,7 @@ fn get_config_file() -> String {
     read_to_string(config_path).unwrap()
 }
 
-fn main() {
+pub fn cli() {
     let args = Args::parse();
     let current_dir = current_dir().unwrap();
     let config_path = current_dir.join(".envlconf").display().to_string();
