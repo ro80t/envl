@@ -7,14 +7,23 @@ license.workspace = true
 edition.workspace = true
 rust-version.workspace = true
 default-run = "envl"
+build = "build.rs"
 
 [[bin]]
 name = "envl"
 path = "src/main.rs"
 
+[lib]
+crate-type = ["rlib", "cdylib"]
+
 [dependencies]
 clap.workspace = true
+napi.workspace = true
+napi-derive.workspace = true
 envl.workspace = true
+
+[build-dependencies]
+napi-build.workspace = true
 
 [lints]
 workspace = true
