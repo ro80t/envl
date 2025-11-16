@@ -77,3 +77,24 @@ jobs:
         run: |
           bun run scripts/envl-version.ts
           bun run scripts/cli-version.ts
+
+  cli:
+    name: Cli build check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      - name: Checkout Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install Packages
+        working-directory: ./packages/envl-cli
+        run: |
+          npm ci
+          npm run build
+          npm run lint
