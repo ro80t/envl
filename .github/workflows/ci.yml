@@ -56,3 +56,24 @@ jobs:
           cacheFrom: ghcr.io/${{ github.repository }}
           push: never
           runCmd: scripts/ci.sh
+
+  version:
+    name: Version Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      - name: Checkout Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install Packages
+        run: bun ci
+
+      - name: Check Version
+        run: |
+          bun run scripts/envl-version.ts
+          bun run scripts/cli-version.ts
