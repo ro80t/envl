@@ -2,6 +2,7 @@ use std::{env::current_dir, fs::read_to_string};
 
 use clap::{Parser, Subcommand};
 use envl::{generator::generate_file, load_envl_core, misc::filesystem::write_file};
+use napi_derive::napi;
 
 #[derive(Parser, Debug, Clone)]
 #[command(version, about, flatten_help = true)]
@@ -22,7 +23,8 @@ fn get_config_file() -> String {
     read_to_string(config_path).unwrap()
 }
 
-fn main() {
+#[napi]
+pub fn cli() {
     let args = Args::parse();
     let current_dir = current_dir().unwrap();
     let config_path = current_dir.join(".envlconf").display().to_string();

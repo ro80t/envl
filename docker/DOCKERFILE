@@ -20,7 +20,7 @@ RUN apt update \
 
 # Update node and npm version
 RUN npm i -g n \
-    && yes | n lts \
+    && yes | n 22.21.1 \
     && apt purge -y nodejs npm
 
 # Install bun

@@ -6,6 +6,10 @@ Can build envl via the CLI.
 
 ```
 cargo install envl-cli
+
+# or
+
+npm i -g envl-cli
 ```
 
 ## Usage

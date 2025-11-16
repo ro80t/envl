@@ -2,6 +2,7 @@ name: CI
 
 on:
   pull_request:
+  push:
 
 jobs:
   envl:
@@ -55,3 +56,70 @@ jobs:
           cacheFrom: ghcr.io/${{ github.repository }}
           push: never
           runCmd: scripts/ci.sh
+
+  version:
+    name: Version Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      - name: Checkout Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install Packages
+        run: bun ci
+
+      - name: Check Version
+        run: |
+          bun run scripts/envl-version.ts
+          bun run scripts/cli-version.ts
+
+  cli:
+    name: Cli build check
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./packages/envl-cli
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      - name: Cache cargo registry
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Checkout Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Checkout Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install Packages (workspace)
+        working-directory: ./
+        run: bun ci
+
+      - name: Install Packages
+        run: npm ci
+
+      - name: Build Cli
+        run: npm run build
+
+      - name: Check Linting
+        run: npm run lint

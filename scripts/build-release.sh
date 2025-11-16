@@ -1,3 +1,3 @@
 #!/bin/bash
 
-cargo build --release --verbose
+cargo build --release --verbose --locked

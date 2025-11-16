@@ -15,7 +15,7 @@ version = "0.10.0"
 repository = "https://github.com/ROBOTofficial/envl"
 license = "MIT"
 edition = "2021"
-rust-version = "1.74" # MSRV
+rust-version = "1.77" # MSRV
 
 [workspace.dependencies]
 clap = { version = "4.5.51", features = ["derive"] }
@@ -24,6 +24,9 @@ regex = { version = "1.11.3" }
 proc-macro2 = { version = "1.0.101" }
 quote = { version = "1.0.42" }
 syn = { version = "2.0.110", features = ["full", "extra-traits"] }
+napi = { version = "3.3.3" }
+napi-derive = { version = "3.3.3" }
+napi-build = { version = "2.3.1" }
 envl = { version = "0.10.0", path = "./packages/envl" }
 envl-vars = { version = "0.10.0", path = "./packages/envl-vars" }
 envl-config = { version = "0.10.0", path = "./packages/envl-config" }
