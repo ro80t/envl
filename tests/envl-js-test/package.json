@@ -1,0 +1,22 @@
+{
+    "name": "envl-js-test",
+    "module": "src/index.ts",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "lint": "eslint . -c ../../scripts/eslint.config.js",
+        "format": "prettier . -w --config ../../scripts/prettier.config.js"
+    },
+    "devDependencies": {
+        "@eslint/compat": "^2.0.0",
+        "@eslint/js": "^9.39.1",
+        "@types/bun": "latest",
+        "eslint": "^9.39.1",
+        "eslint-config-prettier": "^10.1.8",
+        "prettier": "^3.6.2",
+        "typescript-eslint": "^8.46.4"
+    },
+    "peerDependencies": {
+        "typescript": "^5"
+    }
+}
