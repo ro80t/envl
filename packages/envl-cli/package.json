@@ -1,6 +1,7 @@
 {
     "name": "envl-cli",
     "description": "better .env",
+    "version": "0.3.0",
     "type": "module",
     "repository": {
         "type": "git",
@@ -16,7 +17,7 @@
         "napi"
     ],
     "bin": {
-        "envl": "dist/index.mjs"
+        "envl": "./nodejs/index.js"
     },
     "napi": {
         "binaryName": "envl"
@@ -29,9 +30,8 @@
         "access": "public"
     },
     "scripts": {
-        "artifacts": "napi artifacts",
-        "build": "napi build -o napi --platform -r --esm && tsup",
-        "build:debug": "napi build -o napi --platform --esm && tsup",
+        "build": "napi build -o napi --platform -r --esm",
+        "build:debug": "napi build -o napi --platform --esm",
         "lint": "eslint ./nodejs",
         "format": "run-p format:prettier format:rs format:toml",
         "format:prettier": "prettier . -w",
@@ -60,5 +60,6 @@
         "tsup": "^8.5.1",
         "typescript": "^5.9.2",
         "typescript-eslint": "^8.46.4"
-    }
+    },
+    "optionalDependencies": {}
 }
