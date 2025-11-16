@@ -1,13 +1,3 @@
-/** @type {import("prettier").Config} */
-const config = {
-	useTabs: false,
-    tabWidth: 4,
-	singleQuote: false,
-	trailingComma: "none",
-	printWidth: 100,
-	semi: true,
-	quoteProps: "as-needed",
-	jsxSingleQuote: false
-};
+import { config } from "./template/prettier.config.js";
 
-export { config };
+export default config;
