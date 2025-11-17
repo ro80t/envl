@@ -13,7 +13,7 @@ use envl_vars::{
 use std::{collections::HashMap, env::current_dir, path::PathBuf};
 
 use crate::{
-    generator::{generate_file, rust::var::value::gen_value},
+    generator::{generate_file, rust::var::value::gen_value, GenerateOptions},
     misc::{
         error::{
             convert_envl_lib_error, convert_envl_vars_error, convert_io_error, EnvlError,
@@ -42,6 +42,13 @@ pub struct VarData {
 pub type VariableHashMap = HashMap<String, VarData>;
 
 pub fn load_envl(output: String) -> Result<(), Box<EnvlError>> {
+    load_envl_with_options(output, GenerateOptions::default())
+}
+
+pub fn load_envl_with_options(
+    output: String,
+    options: GenerateOptions,
+) -> Result<(), Box<EnvlError>> {
     match current_dir() {
         Ok(current_dir_path) => {
             let config_file_path = current_dir_path.join(".envlconf").display().to_string();
@@ -52,7 +59,7 @@ pub fn load_envl(output: String) -> Result<(), Box<EnvlError>> {
                         config_file_path.to_owned(),
                         code,
                     ) {
-                        Ok(hm) => match generate_file(hm, output.to_owned()) {
+                        Ok(hm) => match generate_file(hm, output.to_owned(), options) {
                             Ok(result) => {
                                 if let Err(err) = write_file(output, result) {
                                     Err(Box::from(convert_io_error(err)))

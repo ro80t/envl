@@ -1,10 +1,15 @@
 use std::{env::current_dir, fs::read_to_string};
 
 use clap::{Parser, Subcommand};
-use envl::{generator::generate_file, load_envl_core, misc::filesystem::write_file};
+use envl::{
+    generator::{generate_file, GenerateOptions},
+    load_envl_core,
+    misc::filesystem::write_file,
+};
 use napi_derive::napi;
 
 #[derive(Parser, Debug, Clone)]
+#[clap(name = "envl", author = "ro80t")]
 #[command(version, about, flatten_help = true)]
 struct Args {
     #[command(subcommand)]
@@ -13,7 +18,12 @@ struct Args {
 
 #[derive(Subcommand, Clone, Debug)]
 pub enum Command {
-    Build { output: String },
+    Build {
+        output: String,
+
+        #[arg(short, long, long_help = "set language")]
+        language: Option<String>,
+    },
 }
 
 fn get_config_file() -> String {
@@ -31,10 +41,11 @@ pub fn cli() {
     let config_code = get_config_file();
 
     match args.command {
-        Command::Build { output } => {
+        Command::Build { output, language } => {
+            let options = GenerateOptions { language };
             let data = load_envl_core(current_dir.clone(), config_path, config_code).unwrap();
 
-            let f = generate_file(data, output.clone()).unwrap();
+            let f = generate_file(data, output.clone(), options).unwrap();
             write_file(current_dir.join(output).display().to_string(), f).unwrap();
         }
     }
