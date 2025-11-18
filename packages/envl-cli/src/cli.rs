@@ -23,6 +23,9 @@ pub enum Command {
 
         #[arg(short, long, long_help = "set language")]
         language: Option<String>,
+
+        #[arg(long)]
+        cjs: Option<bool>,
     },
 }
 
@@ -41,8 +44,12 @@ pub fn cli() {
     let config_code = get_config_file();
 
     match args.command {
-        Command::Build { output, language } => {
-            let options = GenerateOptions { language };
+        Command::Build {
+            output,
+            language,
+            cjs,
+        } => {
+            let options = GenerateOptions { language, cjs };
             let data = load_envl_core(current_dir.clone(), config_path, config_code).unwrap();
 
             let f = generate_file(data, output.clone(), options).unwrap();

@@ -10,6 +10,7 @@ rust-version.workspace = true
 [lib]
 
 [dependencies]
+envl-codeblock.workspace = true
 envl-config.workspace = true
 envl-vars.workspace = true
 envl-utils.workspace = true
