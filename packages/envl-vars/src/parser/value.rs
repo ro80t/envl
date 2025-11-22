@@ -9,7 +9,7 @@ use crate::{
 };
 
 impl Parser {
-    pub fn parse_value(
+    pub(super) fn parse_value(
         &self,
         value: &str,
         position: &Position,

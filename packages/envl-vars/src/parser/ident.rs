@@ -7,7 +7,7 @@ use envl_utils::{
 use crate::parser::{ParsedIdent, Parser, Var};
 
 impl Parser {
-    pub fn parse_ident(
+    pub(super) fn parse_ident(
         &self,
         value: String,
         var: &Var,

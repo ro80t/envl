@@ -14,7 +14,7 @@ use crate::{
 };
 
 impl Parser {
-    pub fn parse_struct<'a>(
+    pub(super) fn parse_struct<'a>(
         &self,
         tokens: &mut Iter<'a, Token>,
     ) -> Result<VariableValue, EnvlError> {
