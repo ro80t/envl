@@ -1,12 +1,10 @@
 use envl_utils::{
     error::{EnvlError, ErrorContext},
+    num::is_num,
     types::Position,
 };
 
-use crate::{
-    misc::{num::is_num, variable::VariableValue},
-    parser::Parser,
-};
+use crate::{misc::variable::VariableValue, parser::Parser};
 
 impl Parser {
     pub(super) fn parse_value(
