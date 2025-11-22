@@ -1,10 +1,5 @@
-use envl_config::{
-    generate_ast as gen_config_ast,
-    misc::{
-        config::Config,
-        variable::{Type, Value},
-    },
-};
+use envl_config::{generate_ast as gen_config_ast, misc::config::Config};
+use envl_utils::variable::{Type, Value};
 use envl_utils::{
     error::{EnvlError, ErrorContext},
     types::Position,

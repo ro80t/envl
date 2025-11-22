@@ -3,13 +3,11 @@ use std::slice::Iter;
 use envl_utils::{
     error::{EnvlError, ErrorContext},
     types::Position,
+    variable::Type,
 };
 
 use crate::{
-    misc::{
-        token::{Token, Value},
-        variable::Type,
-    },
+    misc::token::{Token, Value},
     parser::Parser,
 };
 

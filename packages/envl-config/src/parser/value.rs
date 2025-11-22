@@ -1,6 +1,6 @@
 use envl_utils::error::ErrorContext;
 
-use crate::misc::variable::{Type, Value};
+use envl_utils::variable::{Type, Value};
 
 pub fn parse_value(t: Type, ident: String) -> Result<Value, ErrorContext> {
     match t {

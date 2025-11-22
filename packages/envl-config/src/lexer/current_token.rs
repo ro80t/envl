@@ -1,7 +1,6 @@
-use crate::{
-    lexer::Lexer,
-    misc::{token::Value, variable::Type},
-};
+use envl_utils::variable::Type;
+
+use crate::{lexer::Lexer, misc::token::Value};
 
 impl Lexer {
     pub(super) fn lex_current_token(&self, current_token: String) -> Value {

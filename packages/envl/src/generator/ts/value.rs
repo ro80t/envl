@@ -1,5 +1,5 @@
 use envl_codeblock::code_block;
-use envl_config::misc::variable::Type;
+use envl_utils::variable::Type;
 use proc_macro2::TokenStream;
 
 use crate::generator::ts::{gen_array::gen_array, gen_struct::gen_struct};

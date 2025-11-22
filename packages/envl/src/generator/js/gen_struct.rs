@@ -1,7 +1,7 @@
 use std::{collections::HashMap, io::Error};
 
 use envl_codeblock::code_block;
-use envl_config::misc::variable::Value;
+use envl_utils::variable::Value;
 use proc_macro2::TokenStream;
 
 use crate::generator::js::value::gen_value;

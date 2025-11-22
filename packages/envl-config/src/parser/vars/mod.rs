@@ -3,13 +3,13 @@ use std::{collections::HashMap, slice::Iter};
 use envl_utils::{
     error::{EnvlError, ErrorContext},
     name::is_valid_variable_name,
+    variable::{Type, Value as VarValue},
 };
 
 use crate::{
     misc::{
         config::{Var, Vars},
         token::{Token, Value},
-        variable::{Type, Value as VarValue},
     },
     parser::{vars::option_value::parse_parsed_value, Parser},
 };

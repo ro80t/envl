@@ -1,4 +1,4 @@
-use envl_config::misc::variable::Value;
+use envl_utils::variable::Value;
 use proc_macro2::TokenStream;
 use std::io::Error;
 

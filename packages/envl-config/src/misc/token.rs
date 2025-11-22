@@ -1,6 +1,4 @@
-use envl_utils::types::Position;
-
-use crate::misc::variable::Type;
+use envl_utils::{types::Position, variable::Type};
 
 #[derive(Debug, PartialEq, Clone)]
 pub(crate) enum Value {

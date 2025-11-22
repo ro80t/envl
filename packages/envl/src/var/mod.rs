@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 
-use envl_config::misc::variable::{Type, Value};
 use envl_utils::{
     error::{EnvlError, ErrorContext},
     types::Position,
+    variable::{Type, Value},
 };
 use envl_vars::misc::variable::VariableValue;
 
