@@ -18,14 +18,14 @@ use crate::{
 };
 
 #[derive(Debug, Clone)]
-pub enum ParsedValue {
+pub(crate) enum ParsedValue {
     Array(Vec<ParsedValue>),
     Struct(HashMap<String, ParsedValue>),
     Value(String),
     Null,
 }
 
-pub fn parse_parsed_value(
+pub(crate) fn parse_parsed_value(
     v: ParsedValue,
     t: Type,
     position: Position,

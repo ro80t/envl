@@ -14,7 +14,7 @@ use crate::{
 };
 
 impl Parser {
-    pub fn parse_option<'a>(&self, tokens: &mut Iter<'a, Token>) -> Result<Type, EnvlError> {
+    pub(super) fn parse_option<'a>(&self, tokens: &mut Iter<'a, Token>) -> Result<Type, EnvlError> {
         let mut in_block = false;
         let mut block_closed = false;
         let mut last_position = None;

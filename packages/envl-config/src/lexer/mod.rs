@@ -4,7 +4,7 @@ use crate::misc::token::{Token, Value};
 
 pub mod current_token;
 
-pub struct Lexer {
+pub(crate) struct Lexer {
     file_path: String,
     code: String,
 }

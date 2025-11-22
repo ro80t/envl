@@ -7,7 +7,7 @@ use crate::{
     parser::{var::parse_struct::parse_struct, vars::option_value::ParsedValue},
 };
 
-pub fn parse_array<'a>(tokens: &mut Iter<'a, Token>) -> Result<ParsedValue, EnvlError> {
+pub(crate) fn parse_array<'a>(tokens: &mut Iter<'a, Token>) -> Result<ParsedValue, EnvlError> {
     let mut block_closed = false;
     let mut comma_used = false;
     let mut elements = Vec::new();

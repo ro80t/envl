@@ -20,7 +20,7 @@ pub mod option_value;
 pub mod parse_struct;
 
 impl Parser {
-    pub fn parse_vars<'a>(&self, tokens: &mut Iter<'a, Token>) -> Result<Vars, EnvlError> {
+    pub(super) fn parse_vars<'a>(&self, tokens: &mut Iter<'a, Token>) -> Result<Vars, EnvlError> {
         let mut in_block = false;
         let mut block_closed = false;
         let mut colon_used = false;
