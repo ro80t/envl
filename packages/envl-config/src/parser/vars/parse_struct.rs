@@ -3,18 +3,16 @@ use std::{collections::HashMap, slice::Iter};
 use envl_utils::{
     error::{EnvlError, ErrorContext},
     name::is_valid_variable_name,
+    variable::Type,
 };
 
 use crate::{
-    misc::{
-        token::{Token, Value},
-        variable::Type,
-    },
+    misc::token::{Token, Value},
     parser::Parser,
 };
 
 impl Parser {
-    pub fn parse_struct<'a>(&self, tokens: &mut Iter<'a, Token>) -> Result<Type, EnvlError> {
+    pub(super) fn parse_struct<'a>(&self, tokens: &mut Iter<'a, Token>) -> Result<Type, EnvlError> {
         let mut in_block = false;
         let mut block_closed = false;
         let mut colon_used = false;

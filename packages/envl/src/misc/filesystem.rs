@@ -4,7 +4,9 @@ use std::{
     path::Path,
 };
 
-use crate::misc::error::{convert_io_error, EnvlError};
+use envl_utils::{error::EnvlError, types::Position};
+
+use crate::misc::error::convert_io_error;
 
 pub fn read_file(file_path: String) -> Result<String, Box<EnvlError>> {
     match File::open(&file_path) {
@@ -13,7 +15,14 @@ pub fn read_file(file_path: String) -> Result<String, Box<EnvlError>> {
             let _ = f.read_to_string(&mut buf);
             Ok(buf)
         }
-        Err(err) => Err(Box::from(convert_io_error(err))),
+        Err(err) => Err(Box::from(convert_io_error(
+            err,
+            Position {
+                file_path: file!().to_string(),
+                row: line!() as usize,
+                col: column!() as usize,
+            },
+        ))),
     }
 }
 

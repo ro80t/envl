@@ -2,16 +2,16 @@
 pub mod parser_test {
     use std::collections::HashMap;
 
-    use envl_utils::error::EnvlError;
+    use envl_utils::{
+        error::EnvlError,
+        variable::{Type, Value},
+    };
 
     use crate::{
         lexer::Lexer,
-        misc::{
-            config::{
-                remove_position_prop, Config, ConfigWithoutPosition, SettingWithoutPotision,
-                SettingsWithoutPosition, VarWithoutPosition,
-            },
-            variable::{Type, Value},
+        misc::config::{
+            remove_position_prop, Config, ConfigWithoutPosition, SettingWithoutPotision,
+            SettingsWithoutPosition, VarWithoutPosition,
         },
         parser::Parser,
     };

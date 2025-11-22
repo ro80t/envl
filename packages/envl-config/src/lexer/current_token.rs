@@ -1,10 +1,9 @@
-use crate::{
-    lexer::Lexer,
-    misc::{token::Value, variable::Type},
-};
+use envl_utils::variable::Type;
+
+use crate::{lexer::Lexer, misc::token::Value};
 
 impl Lexer {
-    pub fn lex_current_token(&self, current_token: String) -> Value {
+    pub(super) fn lex_current_token(&self, current_token: String) -> Value {
         match current_token.as_str() {
             "string" => Value::Type(Type::String),
             "char" => Value::Type(Type::Char),

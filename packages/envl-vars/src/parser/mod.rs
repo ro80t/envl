@@ -24,7 +24,7 @@ pub struct Var {
     pub value: Option<VariableValue>,
 }
 
-pub struct Parser {
+pub(crate) struct Parser {
     pub tokens: Vec<Token>,
 }
 

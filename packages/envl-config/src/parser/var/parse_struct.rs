@@ -7,7 +7,7 @@ use crate::{
     parser::{var::array::parse_array, vars::option_value::ParsedValue},
 };
 
-pub fn parse_struct<'a>(tokens: &mut Iter<'a, Token>) -> Result<ParsedValue, EnvlError> {
+pub(crate) fn parse_struct<'a>(tokens: &mut Iter<'a, Token>) -> Result<ParsedValue, EnvlError> {
     let mut in_block = false;
     let mut block_closed = false;
     let mut colon_used = false;

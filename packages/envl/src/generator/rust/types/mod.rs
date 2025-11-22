@@ -1,4 +1,4 @@
-use envl_config::misc::variable::Type;
+use envl_utils::variable::Type;
 use proc_macro2::TokenStream;
 use quote::quote;
 

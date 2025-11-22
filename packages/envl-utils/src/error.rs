@@ -73,4 +73,7 @@ pub enum ErrorContext {
 
     #[error("Invalid variable name {0}")]
     InvalidName(String),
+
+    #[error("{0}")]
+    TranspileError(String),
 }

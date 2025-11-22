@@ -28,7 +28,10 @@ impl Parser {
         }
     }
 
-    pub fn parse_settings<'a>(&self, tokens: &mut Iter<'a, Token>) -> Result<Settings, EnvlError> {
+    pub(super) fn parse_settings<'a>(
+        &self,
+        tokens: &mut Iter<'a, Token>,
+    ) -> Result<Settings, EnvlError> {
         let mut in_block = false;
         let mut block_closed = false;
         let mut equal_used = false;

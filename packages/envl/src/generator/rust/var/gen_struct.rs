@@ -1,7 +1,7 @@
 use std::{collections::HashMap, io::Error};
 
-use envl_config::misc::variable::{Type, Value};
 use envl_utils::case::{CamelCase, Case, SnakeCase};
+use envl_utils::variable::{Type, Value};
 use proc_macro2::TokenStream;
 use quote::quote;
 

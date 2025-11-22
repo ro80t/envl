@@ -11,7 +11,7 @@ use crate::{
 };
 
 impl Parser {
-    pub fn parse_array<'a>(
+    pub(super) fn parse_array<'a>(
         &self,
         tokens: &mut Iter<'a, Token>,
     ) -> Result<VariableValue, EnvlError> {

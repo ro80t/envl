@@ -3,13 +3,11 @@ use std::{collections::HashMap, slice::Iter};
 use envl_utils::{
     error::{EnvlError, ErrorContext},
     types::Position,
+    variable::{Type, Value as ConfigValue},
 };
 
 use crate::{
-    misc::{
-        token::{Token, Value},
-        variable::{Type, Value as ConfigValue},
-    },
+    misc::token::{Token, Value},
     parser::{
         value::parse_value,
         var::{array::parse_array, parse_struct::parse_struct},
@@ -18,14 +16,14 @@ use crate::{
 };
 
 #[derive(Debug, Clone)]
-pub enum ParsedValue {
+pub(crate) enum ParsedValue {
     Array(Vec<ParsedValue>),
     Struct(HashMap<String, ParsedValue>),
     Value(String),
     Null,
 }
 
-pub fn parse_parsed_value(
+pub(crate) fn parse_parsed_value(
     v: ParsedValue,
     t: Type,
     position: Position,

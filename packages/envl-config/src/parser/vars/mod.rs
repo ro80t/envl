@@ -3,13 +3,13 @@ use std::{collections::HashMap, slice::Iter};
 use envl_utils::{
     error::{EnvlError, ErrorContext},
     name::is_valid_variable_name,
+    variable::{Type, Value as VarValue},
 };
 
 use crate::{
     misc::{
         config::{Var, Vars},
         token::{Token, Value},
-        variable::{Type, Value as VarValue},
     },
     parser::{vars::option_value::parse_parsed_value, Parser},
 };
@@ -20,7 +20,7 @@ pub mod option_value;
 pub mod parse_struct;
 
 impl Parser {
-    pub fn parse_vars<'a>(&self, tokens: &mut Iter<'a, Token>) -> Result<Vars, EnvlError> {
+    pub(super) fn parse_vars<'a>(&self, tokens: &mut Iter<'a, Token>) -> Result<Vars, EnvlError> {
         let mut in_block = false;
         let mut block_closed = false;
         let mut colon_used = false;

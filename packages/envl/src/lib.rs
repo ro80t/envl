@@ -1,24 +1,16 @@
-use envl_config::{
-    generate_ast as gen_config_ast,
-    misc::{
-        config::Config,
-        variable::{Type, Value},
-    },
+use envl_config::{generate_ast as gen_config_ast, misc::config::Config};
+use envl_utils::variable::{Type, Value};
+use envl_utils::{
+    error::{EnvlError, ErrorContext},
+    types::Position,
 };
-use envl_utils::types::Position;
-use envl_vars::{
-    generate_ast as gen_vars_ast,
-    misc::variable::{Variable, VariableValue},
-};
+use envl_vars::{generate_ast as gen_vars_ast, misc::variable::Variable};
 use std::{collections::HashMap, env::current_dir, path::PathBuf};
 
 use crate::{
-    generator::{generate_file, rust::var::value::gen_value},
+    generator::{generate_file, rust::var::value::gen_value, GenerateOptions},
     misc::{
-        error::{
-            convert_envl_lib_error, convert_envl_vars_error, convert_io_error, EnvlError,
-            EnvlLibError,
-        },
+        error::convert_io_error,
         filesystem::{read_file, write_file},
         vars::vars_to_hashmap,
     },
@@ -35,13 +27,19 @@ pub struct VarData {
     pub v_type: Type,
     pub default_value: Value,
     pub actions_value: Value,
-    pub basic_value: Option<VariableValue>,
     pub position: Position,
 }
 
 pub type VariableHashMap = HashMap<String, VarData>;
 
 pub fn load_envl(output: String) -> Result<(), Box<EnvlError>> {
+    load_envl_with_options(output, GenerateOptions::default())
+}
+
+pub fn load_envl_with_options(
+    output: String,
+    options: GenerateOptions,
+) -> Result<(), Box<EnvlError>> {
     match current_dir() {
         Ok(current_dir_path) => {
             let config_file_path = current_dir_path.join(".envlconf").display().to_string();
@@ -52,15 +50,29 @@ pub fn load_envl(output: String) -> Result<(), Box<EnvlError>> {
                         config_file_path.to_owned(),
                         code,
                     ) {
-                        Ok(hm) => match generate_file(hm, output.to_owned()) {
+                        Ok(hm) => match generate_file(hm, output.to_owned(), options) {
                             Ok(result) => {
                                 if let Err(err) = write_file(output, result) {
-                                    Err(Box::from(convert_io_error(err)))
+                                    Err(Box::from(convert_io_error(
+                                        err,
+                                        Position {
+                                            file_path: file!().to_string(),
+                                            row: line!() as usize,
+                                            col: column!() as usize,
+                                        },
+                                    )))
                                 } else {
                                     Ok(())
                                 }
                             }
-                            Err(err) => Err(Box::from(convert_io_error(err))),
+                            Err(err) => Err(Box::from(convert_io_error(
+                                err,
+                                Position {
+                                    file_path: file!().to_string(),
+                                    row: line!() as usize,
+                                    col: column!() as usize,
+                                },
+                            ))),
                         },
                         Err(err) => Err(err),
                     }
@@ -68,7 +80,14 @@ pub fn load_envl(output: String) -> Result<(), Box<EnvlError>> {
                 Err(err) => Err(err),
             }
         }
-        Err(err) => Err(Box::from(convert_io_error(err))),
+        Err(err) => Err(Box::from(convert_io_error(
+            err,
+            Position {
+                file_path: file!().to_string(),
+                row: line!() as usize,
+                col: column!() as usize,
+            },
+        ))),
     }
 }
 
@@ -93,7 +112,6 @@ pub fn load_envl_core(
                                     v_type: value.v_type.clone(),
                                     default_value: value.default_value,
                                     actions_value: value.actions_value,
-                                    basic_value: Some(v.value.clone()),
                                     position: v.position.clone(),
                                 },
                             );
@@ -110,7 +128,6 @@ pub fn load_envl_core(
                             v_type: value.v_type,
                             default_value: value.default_value,
                             actions_value: value.actions_value,
-                            basic_value: None,
                             position: value.position,
                         },
                     );
@@ -118,7 +135,7 @@ pub fn load_envl_core(
             }
 
             if let Err(err) = check_envl_vars(result.to_owned()) {
-                Err(Box::from(convert_envl_lib_error(err)))
+                Err(Box::from(err))
             } else {
                 Ok(result)
             }
@@ -127,15 +144,16 @@ pub fn load_envl_core(
     }
 }
 
-pub fn check_envl_vars(hm: HashMap<String, VarData>) -> Result<(), EnvlLibError> {
+pub fn check_envl_vars(hm: HashMap<String, VarData>) -> Result<(), EnvlError> {
     for (name, value) in hm {
         if value.value == Value::Null {
             match &value.default_value {
                 Value::Null => match &value.v_type {
                     Type::Option(_) => {}
                     _ => {
-                        return Err(EnvlLibError {
-                            message: "Invalid Type".to_string(),
+                        return Err(EnvlError {
+                            message: ErrorContext::TranspileError("Invalid Type".to_string()),
+                            position: value.position,
                         });
                     }
                 },
@@ -143,8 +161,9 @@ pub fn check_envl_vars(hm: HashMap<String, VarData>) -> Result<(), EnvlLibError>
                     if gen_value(name, value.v_type.to_owned(), v.to_owned(), &mut Vec::new())
                         .is_err()
                     {
-                        return Err(EnvlLibError {
-                            message: "Invalid Type".to_string(),
+                        return Err(EnvlError {
+                            message: ErrorContext::TranspileError("Invalid Type".to_string()),
+                            position: value.position,
                         });
                     }
                 }
@@ -170,11 +189,11 @@ pub fn load_files(
             match read_file(file_path.to_owned()) {
                 Ok(code) => match gen_vars_ast(file_path, code) {
                     Ok(vars) => Ok((vars, config)),
-                    Err(err) => Err(Box::from(convert_envl_vars_error(err))),
+                    Err(err) => Err(Box::from(err)),
                 },
                 Err(err) => Err(err),
             }
         }
-        Err(err) => Err(Box::from(convert_envl_vars_error(err))),
+        Err(err) => Err(Box::from(err)),
     }
 }

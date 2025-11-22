@@ -1,6 +1,6 @@
 use std::io::Error;
 
-use envl_config::misc::variable::{Type, Value};
+use envl_utils::variable::{Type, Value};
 use proc_macro2::{Literal, TokenStream};
 use quote::{quote, ToTokens};
 

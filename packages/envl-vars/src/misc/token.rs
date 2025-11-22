@@ -1,7 +1,7 @@
 use envl_utils::types::Position;
 
 #[derive(Debug, PartialEq, Clone)]
-pub enum Value {
+pub(crate) enum Value {
     Comment(String),
     Ident(String),
     RightSquareBracket,
@@ -16,7 +16,7 @@ pub enum Value {
 }
 
 #[derive(Debug, Clone)]
-pub struct Token {
+pub(crate) struct Token {
     pub value: Value,
     pub position: Position,
 }

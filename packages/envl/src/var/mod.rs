@@ -1,9 +1,11 @@
 use std::collections::HashMap;
 
-use envl_config::misc::variable::{Type, Value};
+use envl_utils::{
+    error::{EnvlError, ErrorContext},
+    types::Position,
+    variable::{Type, Value},
+};
 use envl_vars::misc::variable::VariableValue;
-
-use crate::misc::error::{convert_envl_lib_error, EnvlError, EnvlLibError};
 
 pub fn parse_var(t: Type, v: VariableValue) -> Result<Value, Box<EnvlError>> {
     match &t {
@@ -86,10 +88,14 @@ pub fn parse_var(t: Type, v: VariableValue) -> Result<Value, Box<EnvlError>> {
                             }
                         }
                     } else {
-                        dbg!(t.to_owned(), v.to_owned());
-                        return Err(Box::from(convert_envl_lib_error(EnvlLibError {
-                            message: "Invalid type".to_string(),
-                        })));
+                        return Err(Box::from(EnvlError {
+                            message: ErrorContext::TranspileError("Invalid type".to_string()),
+                            position: Position {
+                                file_path: file!().to_string(),
+                                row: line!() as usize,
+                                col: column!() as usize,
+                            },
+                        }));
                     }
                 }
 
@@ -98,7 +104,12 @@ pub fn parse_var(t: Type, v: VariableValue) -> Result<Value, Box<EnvlError>> {
         }
     }
 
-    Err(Box::from(convert_envl_lib_error(EnvlLibError {
-        message: "Invalid type".to_string(),
-    })))
+    Err(Box::from(EnvlError {
+        message: ErrorContext::TranspileError("Invalid type".to_string()),
+        position: Position {
+            file_path: file!().to_string(),
+            row: line!() as usize,
+            col: column!() as usize,
+        },
+    }))
 }

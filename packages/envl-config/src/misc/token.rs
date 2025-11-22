@@ -1,9 +1,7 @@
-use envl_utils::types::Position;
-
-use crate::misc::variable::Type;
+use envl_utils::{types::Position, variable::Type};
 
 #[derive(Debug, PartialEq, Clone)]
-pub enum Value {
+pub(crate) enum Value {
     Comment(String),
     Ident(String),
     Type(Type),
@@ -28,7 +26,7 @@ pub enum Value {
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct Token {
+pub(crate) struct Token {
     pub value: Value,
     pub position: Position,
 }

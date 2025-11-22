@@ -13,7 +13,7 @@ pub mod value;
 pub mod var;
 pub mod vars;
 
-pub struct Parser {
+pub(crate) struct Parser {
     pub file_path: String,
     pub tokens: Vec<Token>,
 }
