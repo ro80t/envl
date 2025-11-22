@@ -9,10 +9,7 @@ use envl_utils::{
     error::{EnvlError, ErrorContext},
     types::Position,
 };
-use envl_vars::{
-    generate_ast as gen_vars_ast,
-    misc::variable::{Variable, VariableValue},
-};
+use envl_vars::{generate_ast as gen_vars_ast, misc::variable::Variable};
 use std::{collections::HashMap, env::current_dir, path::PathBuf};
 
 use crate::{
@@ -35,7 +32,6 @@ pub struct VarData {
     pub v_type: Type,
     pub default_value: Value,
     pub actions_value: Value,
-    pub basic_value: Option<VariableValue>,
     pub position: Position,
 }
 
@@ -121,7 +117,6 @@ pub fn load_envl_core(
                                     v_type: value.v_type.clone(),
                                     default_value: value.default_value,
                                     actions_value: value.actions_value,
-                                    basic_value: Some(v.value.clone()),
                                     position: v.position.clone(),
                                 },
                             );
@@ -138,7 +133,6 @@ pub fn load_envl_core(
                             v_type: value.v_type,
                             default_value: value.default_value,
                             actions_value: value.actions_value,
-                            basic_value: None,
                             position: value.position,
                         },
                     );
