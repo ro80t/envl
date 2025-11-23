@@ -46,10 +46,12 @@ jobs:
         run: rustup component add clippy rustfmt
 
       - name: Install target
-        run: rustup target add ${{ matrix.target }}
+        run: |
+            rustup target add ${{ matrix.target }}
+            cargo install cross
 
       - name: Build
-        run: cargo build --target ${{ matrix.target }} --release --verbose --locked
+        run: cross build --target ${{ matrix.target }} --release --verbose --locked
 
       - name: Compress (${{ matrix.target }})
         if: matrix.os == 'ubuntu-latest'
