@@ -43,12 +43,12 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Install tools
-        run: rustup component add clippy rustfmt
+        run: |
+            rustup component add clippy rustfmt
+            cargo install cross
 
       - name: Install target
-        run: |
-            rustup target add ${{ matrix.target }}
-            cargo install cross
+        run: rustup target add ${{ matrix.target }}
 
       - name: Build
         run: cross build --target ${{ matrix.target }} --release --verbose --locked
