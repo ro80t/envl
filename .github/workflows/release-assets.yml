@@ -45,6 +45,7 @@ jobs:
       - name: Install tools
         run: |
             rustup component add clippy rustfmt
+            rustup toolchain install nightly
             cargo install cross
 
       - name: Install target
