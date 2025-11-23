@@ -1,9 +1,8 @@
 name: Release
 
 on:
-  release:
-    types:
-      - published
+  push:
+  pull_request:
 
 jobs:
   assets:
@@ -31,38 +30,49 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
 
+      - name: Cache cargo registry
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
       - name: Install tools
-        run: |
-            rustup component add clippy rustfmt
-            cargo install cross
+        run: rustup component add clippy rustfmt
 
       - name: Install target
         run: rustup target add ${{ matrix.target }}
 
       - name: Build
-        run: cross build --target ${{ matrix.target }} --release --verbose --locked
+        run: cargo build --target ${{ matrix.target }} --release --verbose --locked
 
       - name: Compress (${{ matrix.target }})
-        if: ${{ matrix.os }} == "ubuntu-latest"
+        if: matrix.os == 'ubuntu-latest'
         run: |
           cd target/${{ matrix.target }}/release
           strip envl
           zip -r envl-${{ matrix.target }}.zip envl
 
       - name: Compress (${{ matrix.target }})
-        if: ${{ matrix.os }} == "macos-latest"
+        if: matrix.os == 'macos-latest'
         run: |
           strip -x -S target/${{ matrix.target }}/release/envl
           cd target/${{ matrix.target }}/release
           zip -r envl-${{ matrix.target }}.zip envl
 
       - name: Compress (${{ matrix.target }})
-        if: ${{ matrix.os }} == "windows-latest"
+        if: matrix.os == 'windows-latest'
         shell: pwsh
         run: |
           Compress-Archive -CompressionLevel Optimal -Force -Path target/${{ matrix.target }}/release/envl.exe -DestinationPath target/${{ matrix.target }}/release/envl-${{ matrix.target }}.zip
 
       - name: Upload
+        if: github.ref_type == 'tag'
         uses: softprops/action-gh-release@v2
         with:
             files: target/${{ matrix.target }}/release/envl-${{ matrix.target }}.zip
