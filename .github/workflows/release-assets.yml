@@ -1,4 +1,4 @@
-name: Release
+name: Upload Release Assets
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   assets:
-    name: Upload Assets
+    name: Upload Assets (${{ matrix.target }})
 
     strategy:
       matrix:
