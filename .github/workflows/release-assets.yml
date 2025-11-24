@@ -9,6 +9,7 @@ jobs:
     name: Upload Assets (${{ matrix.target }})
 
     strategy:
+      fail-fast: false
       matrix:
         include:
           - target: aarch64-apple-darwin
