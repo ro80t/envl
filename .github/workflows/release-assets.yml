@@ -53,21 +53,21 @@ jobs:
         run: cross build --target ${{ matrix.target }} --release --verbose --locked
 
       - name: Compress (in Ubuntu)
-        if: matrix.os == 'ubuntu-latest'
+        if: contains(matrix.os, 'ubuntu')
         run: |
           cd target/${{ matrix.target }}/release
           strip envl
           zip -r envl-${{ matrix.target }}.zip envl
 
       - name: Compress (in Mac)
-        if: matrix.os == 'macos-latest'
+        if: contains(matrix.os, 'macos')
         run: |
           strip -x -S target/${{ matrix.target }}/release/envl
           cd target/${{ matrix.target }}/release
           zip -r envl-${{ matrix.target }}.zip envl
 
       - name: Compress (in Windows)
-        if: matrix.os == 'windows-latest'
+        if: contains(matrix.os, 'windows')
         shell: pwsh
         run: |
           Compress-Archive -CompressionLevel Optimal -Force -Path target/${{ matrix.target }}/release/envl.exe -DestinationPath target/${{ matrix.target }}/release/envl-${{ matrix.target }}.zip
