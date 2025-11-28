@@ -20,6 +20,7 @@ use crate::{
 pub mod generator;
 pub mod misc;
 pub mod var;
+pub mod vars;
 
 #[derive(Debug, Clone)]
 pub struct VarData {

@@ -76,4 +76,7 @@ pub enum ErrorContext {
 
     #[error("{0}")]
     TranspileError(String),
+
+    #[error("{0} is unnecessary variable")]
+    UnnecessaryVariable(String),
 }
