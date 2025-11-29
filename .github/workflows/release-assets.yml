@@ -23,6 +23,9 @@ jobs:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-24.04
 
+    permissions:
+      contents: write
+
     runs-on: ${{ matrix.os }}
 
     steps:
