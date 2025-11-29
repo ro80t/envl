@@ -4,7 +4,7 @@ use envl_config::misc::config::Config;
 use envl_utils::{
     error::{EnvlError, ErrorContext},
     types::Position,
-    variable::Value as VarVariable,
+    variable::{Type, Value as VarVariable},
 };
 
 use crate::{
@@ -45,12 +45,15 @@ pub(crate) fn gen_vars(
             }
         } else {
             match var.default_value {
-                VarVariable::Null => {
-                    return Err(EnvlError {
-                        message: ErrorContext::Required(format!("{}", name)),
-                        position: Position::default(),
-                    });
-                }
+                VarVariable::Null => match var.v_type {
+                    Type::Option(_) => {}
+                    _ => {
+                        return Err(EnvlError {
+                            message: ErrorContext::Required(format!("{}", name)),
+                            position: Position::default(),
+                        });
+                    }
+                },
                 _ => {}
             }
 

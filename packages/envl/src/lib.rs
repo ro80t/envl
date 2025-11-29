@@ -7,6 +7,7 @@ use envl_utils::{
 use envl_vars::{generate_ast as gen_vars_ast, misc::variable::Variable};
 use std::{collections::HashMap, env::current_dir, path::PathBuf};
 
+use crate::vars::gen_vars;
 use crate::{
     generator::{generate_file, rust::var::value::gen_value, GenerateOptions},
     misc::{
@@ -14,7 +15,6 @@ use crate::{
         filesystem::{read_file, write_file},
         vars::vars_to_hashmap,
     },
-    var::parse_var,
 };
 
 pub mod generator;
@@ -98,47 +98,12 @@ pub fn load_envl_core(
     code: String,
 ) -> Result<VariableHashMap, Box<EnvlError>> {
     match load_files(current_dir, config_file_path, code) {
-        Ok((vars, config)) => {
+        Ok((vars, config, var_file_path)) => {
             let vars_hm = vars_to_hashmap(vars);
-            let mut result = HashMap::new();
 
-            for (name, value) in config.vars {
-                if let Some(v) = vars_hm.get(&name) {
-                    match parse_var(value.v_type.clone(), v.value.clone()) {
-                        Ok(var) => {
-                            result.insert(
-                                name,
-                                VarData {
-                                    value: var,
-                                    v_type: value.v_type.clone(),
-                                    default_value: value.default_value,
-                                    actions_value: value.actions_value,
-                                    position: v.position.clone(),
-                                },
-                            );
-                        }
-                        Err(err) => {
-                            return Err(err);
-                        }
-                    }
-                } else {
-                    result.insert(
-                        name,
-                        VarData {
-                            value: Value::Null,
-                            v_type: value.v_type,
-                            default_value: value.default_value,
-                            actions_value: value.actions_value,
-                            position: value.position,
-                        },
-                    );
-                }
-            }
-
-            if let Err(err) = check_envl_vars(result.to_owned()) {
-                Err(Box::from(err))
-            } else {
-                Ok(result)
+            match gen_vars(var_file_path, vars_hm, config) {
+                Ok(hm) => Ok(hm),
+                Err(err) => Err(Box::from(err)),
             }
         }
         Err(err) => Err(err),
@@ -179,7 +144,7 @@ pub fn load_files(
     current_dir: PathBuf,
     config_file_path: String,
     code: String,
-) -> Result<(Vec<Variable>, Config), Box<EnvlError>> {
+) -> Result<(Vec<Variable>, Config, String), Box<EnvlError>> {
     match gen_config_ast(config_file_path.clone(), code.clone()) {
         Ok(config) => {
             let file_path = if let Some(ref file_path) = config.settings.envl_file_path {
@@ -188,8 +153,8 @@ pub fn load_files(
                 current_dir.join(".envl").display().to_string()
             };
             match read_file(file_path.to_owned()) {
-                Ok(code) => match gen_vars_ast(file_path, code) {
-                    Ok(vars) => Ok((vars, config)),
+                Ok(code) => match gen_vars_ast(file_path.clone(), code) {
+                    Ok(vars) => Ok((vars, config, file_path)),
                     Err(err) => Err(Box::from(err)),
                 },
                 Err(err) => Err(err),
