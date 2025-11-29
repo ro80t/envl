@@ -1,4 +1,3 @@
-use envl_utils::variable::Value;
 use proc_macro2::TokenStream;
 use std::io::Error;
 
@@ -13,21 +12,8 @@ pub fn parse_var(
     var: VarData,
     structs: &mut Vec<TokenStream>,
 ) -> Result<String, Error> {
-    match var.value {
-        Value::Null => {
-            match gen_value(
-                name,
-                var.v_type.to_owned(),
-                var.default_value.to_owned(),
-                structs,
-            ) {
-                Ok(r) => Ok(r.to_string()),
-                Err(err) => Err(err),
-            }
-        }
-        _ => match gen_value(name, var.v_type.to_owned(), var.value.to_owned(), structs) {
-            Ok(r) => Ok(r.to_string()),
-            Err(err) => Err(err),
-        },
+    match gen_value(name, var.v_type.to_owned(), var.value.to_owned(), structs) {
+        Ok(r) => Ok(r.to_string()),
+        Err(err) => Err(err),
     }
 }
