@@ -9,7 +9,7 @@
     "changeset": "npx @changesets/cli"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.29.5",
+    "@changesets/cli": "^2.29.7",
     "@eslint/compat": "^2.0.0",
     "@eslint/js": "^9.32.0",
     "@types/bun": "latest",
