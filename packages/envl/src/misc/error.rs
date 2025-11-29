@@ -5,7 +5,7 @@ use envl_utils::{
     types::Position,
 };
 
-pub fn convert_io_error(err: Error, position: Position) -> EnvlError {
+pub(crate) fn convert_io_error(err: Error, position: Position) -> EnvlError {
     let message = match err.get_ref() {
         Some(msg) => msg.to_string(),
         None => "unknown error".to_string(),

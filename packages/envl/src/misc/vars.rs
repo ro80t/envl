@@ -11,7 +11,7 @@ pub struct Value {
 
 pub type Variables = HashMap<String, Value>;
 
-pub fn vars_to_hashmap(vars: Vec<Variable>) -> Variables {
+pub(crate) fn vars_to_hashmap(vars: Vec<Variable>) -> Variables {
     let mut hm = HashMap::new();
 
     for var in vars {

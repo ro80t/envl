@@ -106,7 +106,7 @@ pub fn load_envl_core(
     }
 }
 
-pub fn load_files(
+pub(crate) fn load_files(
     current_dir: PathBuf,
     config_file_path: String,
     code: String,
