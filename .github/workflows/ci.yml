@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Cache cargo registry
         uses: actions/cache@v4
@@ -48,7 +48,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Checkout docker
         uses: devcontainers/ci@v0.3
@@ -63,7 +63,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Checkout Bun
         uses: oven-sh/setup-bun@v2
@@ -88,7 +88,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Cache cargo registry
         uses: actions/cache@v4
