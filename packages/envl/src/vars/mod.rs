@@ -44,27 +44,24 @@ pub(crate) fn gen_vars(
                 }
             }
         } else {
-            match var.default_value {
-                VarVariable::Null => match var.v_type {
+            if var.default_value == VarVariable::Null {
+                match var.v_type {
                     Type::Option(_) => {}
                     _ => {
                         return Err(EnvlError {
-                            message: ErrorContext::Required(format!("{}", name)),
+                            message: ErrorContext::Required(name.to_string()),
                             position: Position::default(),
                         });
                     }
-                },
-                _ => {}
+                }
             }
 
-            if let Err(err) = type_check(
+            type_check(
                 &name,
                 var.default_value.clone(),
                 var.v_type.clone(),
                 &var.position,
-            ) {
-                return Err(err);
-            }
+            )?;
 
             hm.insert(
                 name,
@@ -80,12 +77,12 @@ pub(crate) fn gen_vars(
     }
 
     for (name, _) in vars {
-        if config.vars.get(&name).is_none() {
+        if !config.vars.contains_key(&name) {
             no_used_vars.push(name);
         }
     }
 
-    if no_used_vars.len() != 0 {
+    if !no_used_vars.is_empty() {
         return Err(EnvlError {
             message: ErrorContext::UnnecessaryVariable(no_used_vars.join(" and ")),
             position: Position {

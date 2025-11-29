@@ -19,9 +19,7 @@ pub(crate) fn type_check(
         Type::Array(t) => match var {
             Value::Array(v) => {
                 for e in v {
-                    if let Err(err) = type_check(var_name, e, *t.clone(), position) {
-                        return Err(err);
-                    }
+                    type_check(var_name, e, *t.clone(), position)?
                 }
                 Ok(())
             }

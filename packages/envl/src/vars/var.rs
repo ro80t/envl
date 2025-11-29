@@ -139,13 +139,13 @@ pub(crate) fn gen_variable_data(
                         }
                     }
 
-                    for (name, _) in v {
-                        if types.get(name).is_none() {
+                    for name in v.keys() {
+                        if !types.contains_key(name) {
                             no_used_vars.push(name.to_owned());
                         }
                     }
 
-                    if no_used_vars.len() != 0 {
+                    if !no_used_vars.is_empty() {
                         return Err(EnvlError {
                             message: ErrorContext::UnnecessaryVariable(no_used_vars.join(" and ")),
                             position: Position {
