@@ -1,15 +1,12 @@
 use envl_config::{generate_ast as gen_config_ast, misc::config::Config};
 use envl_utils::variable::{Type, Value};
-use envl_utils::{
-    error::{EnvlError, ErrorContext},
-    types::Position,
-};
+use envl_utils::{error::EnvlError, types::Position};
 use envl_vars::{generate_ast as gen_vars_ast, misc::variable::Variable};
 use std::{collections::HashMap, env::current_dir, path::PathBuf};
 
 use crate::vars::gen_vars;
 use crate::{
-    generator::{generate_file, rust::var::value::gen_value, GenerateOptions},
+    generator::{generate_file, GenerateOptions},
     misc::{
         error::convert_io_error,
         filesystem::{read_file, write_file},
@@ -107,36 +104,6 @@ pub fn load_envl_core(
         }
         Err(err) => Err(err),
     }
-}
-
-pub fn check_envl_vars(hm: HashMap<String, VarData>) -> Result<(), EnvlError> {
-    for (name, value) in hm {
-        if value.value == Value::Null {
-            match &value.default_value {
-                Value::Null => match &value.v_type {
-                    Type::Option(_) => {}
-                    _ => {
-                        return Err(EnvlError {
-                            message: ErrorContext::TranspileError("Invalid Type".to_string()),
-                            position: value.position,
-                        });
-                    }
-                },
-                v => {
-                    if gen_value(name, value.v_type.to_owned(), v.to_owned(), &mut Vec::new())
-                        .is_err()
-                    {
-                        return Err(EnvlError {
-                            message: ErrorContext::TranspileError("Invalid Type".to_string()),
-                            position: value.position,
-                        });
-                    }
-                }
-            }
-        }
-    }
-
-    Ok(())
 }
 
 pub fn load_files(
