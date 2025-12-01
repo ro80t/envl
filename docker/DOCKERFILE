@@ -23,8 +23,10 @@ RUN npm i -g n \
     && yes | n 22.21.1 \
     && apt purge -y nodejs npm
 
-# Install bun
-RUN npm i -g bun
+# Install npm packages
+RUN npm i -g \
+    bun \
+    @antfu/ni
 
 # Install rust
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
