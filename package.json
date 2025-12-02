@@ -24,6 +24,7 @@
     "typescript": "^5"
   },
   "workspaces": [
-    "tests/envl-js-test"
+    "tests/envl-js-test",
+    "tests/envl-ts-test"
   ]
 }
