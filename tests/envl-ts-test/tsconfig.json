@@ -7,12 +7,11 @@
         "moduleDetection": "force",
         "jsx": "react-jsx",
         "allowJs": true,
-        "esModuleInterop": true,
 
         // Bundler mode
         "moduleResolution": "bundler",
         "allowImportingTsExtensions": true,
-        "verbatimModuleSyntax": false,
+        "verbatimModuleSyntax": true,
         "noEmit": true,
 
         // Best practices

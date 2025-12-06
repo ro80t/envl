@@ -1,12 +1,16 @@
 {
-    "name": "envl-js-test",
+    "name": "envl-ts-test",
     "type": "module",
     "private": true,
     "scripts": {
         "build": "./build.sh",
+        "check": "tsc",
         "test": "vitest run",
-        "lint": "eslint ./src/*.test.ts -c ../../scripts/eslint.config.js && prettier --config ../../scripts/prettier.config.js --check ./src/*.test.ts",
+        "lint": "eslint ./src/*.test.ts -c ../../scripts/eslint.config.js && prettier ./src/*.test.ts --check --config ../../scripts/prettier.config.js",
         "format": "prettier ./src/*.test.ts -w --config ../../scripts/prettier.config.js"
+    },
+    "peerDependencies": {
+        "typescript": "^5"
     },
     "devDependencies": {
         "@eslint/compat": "^2.0.0",
@@ -14,11 +18,8 @@
         "@types/bun": "latest",
         "eslint": "^9.39.1",
         "eslint-config-prettier": "^10.1.8",
-        "prettier": "^3.6.2",
-        "typescript-eslint": "^8.46.4",
+        "prettier": "^3.7.3",
+        "typescript-eslint": "^8.48.0",
         "vitest": "^4.0.15"
-    },
-    "peerDependencies": {
-        "typescript": "^5"
     }
 }

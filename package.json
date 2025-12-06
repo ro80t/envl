@@ -1,7 +1,7 @@
 {
   "name": "envl",
   "type": "module",
-  "version": "0.10.2",
+  "version": "0.11.0",
   "private": true,
   "scripts": {
     "lint": "eslint ./scripts -c ./scripts/eslint.config.js && npm run lint --workspaces",
@@ -24,6 +24,7 @@
     "typescript": "^5"
   },
   "workspaces": [
-    "tests/envl-js-test"
+    "tests/envl-js-test",
+    "tests/envl-ts-test"
   ]
 }

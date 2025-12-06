@@ -24,8 +24,18 @@ jobs:
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
+      - name: Checkout Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
       - name: Install tools
-        run: rustup component add clippy rustfmt
+        run: |
+            rustup component add clippy rustfmt
+            npm i -g bun @antfu/ni
+
+      - name: Install npm packages
+        run: bun install --frozen-lockfile
 
       - name: Check build
         run: scripts/build-release.sh
