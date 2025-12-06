@@ -16,7 +16,7 @@ pub(crate) fn gen_value(t: Type) -> TokenStream {
         Type::Option(t) => {
             let gened_type = gen_value(*t.clone());
             code_block! {
-                #gened_type | undefined
+                #gened_type | null
             }
         }
         Type::Struct(elements) => gen_struct(elements.clone()),
