@@ -31,3 +31,5 @@ envl build src/envl.ts --cjs
 ## Support Language
 
 - Rust
+- TypeScript
+- JavaScript
