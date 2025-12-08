@@ -4,6 +4,7 @@ pub mod parser_test {
 
     use envl_utils::{
         error::EnvlError,
+        types::{FilePosition, Position},
         variable::{Type, Value},
     };
 
@@ -18,8 +19,15 @@ pub mod parser_test {
 
     fn gen_obj(code: String) -> Result<Config, EnvlError> {
         let lex = Lexer::new("test.envl".to_string(), code);
-        let tokens = lex.generate();
-        let parser = Parser::new("test.envl".to_string(), tokens);
+        let (tokens, end_file_pos) = lex.generate();
+        let parser = Parser::new(
+            Position {
+                file_path: "test.envl".to_string(),
+                start: FilePosition { col: 0, row: 0 },
+                end: end_file_pos,
+            },
+            tokens,
+        );
         parser.parse()
     }
 

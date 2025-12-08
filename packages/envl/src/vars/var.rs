@@ -2,7 +2,6 @@ use std::collections::HashMap;
 
 use envl_utils::{
     error::{EnvlError, ErrorContext},
-    types::Position,
     variable::{Type, Value as VariableHmValue},
 };
 use envl_vars::misc::variable::VariableValue;
@@ -148,11 +147,7 @@ pub(crate) fn gen_variable_data(
                     if !no_used_vars.is_empty() {
                         return Err(EnvlError {
                             message: ErrorContext::UnnecessaryVariable(no_used_vars.join(" and ")),
-                            position: Position {
-                                file_path: position.file_path,
-                                col: 0,
-                                row: 0,
-                            },
+                            position,
                         });
                     }
 

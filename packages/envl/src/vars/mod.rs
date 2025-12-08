@@ -17,7 +17,7 @@ pub mod type_check;
 pub mod var;
 
 pub(crate) fn gen_vars(
-    var_file_path: String,
+    _var_file_path: String,
     vars: HashMap<String, Value>,
     config: Config,
 ) -> Result<VariableHashMap, EnvlError> {
@@ -76,20 +76,23 @@ pub(crate) fn gen_vars(
         }
     }
 
-    for (name, _) in vars {
+    for (name, value) in vars {
         if !config.vars.contains_key(&name) {
-            no_used_vars.push(name);
+            no_used_vars.push((name, value.position));
         }
     }
 
     if !no_used_vars.is_empty() {
+        let err_msg = no_used_vars
+            .iter()
+            .map(|(n, _)| n.clone())
+            .collect::<Vec<_>>()
+            .join(" and ")
+            .clone();
+        let file_position = &no_used_vars[0].1;
         return Err(EnvlError {
-            message: ErrorContext::UnnecessaryVariable(no_used_vars.join(" and ")),
-            position: Position {
-                file_path: var_file_path,
-                col: 0,
-                row: 0,
-            },
+            message: ErrorContext::UnnecessaryVariable(err_msg),
+            position: file_position.clone(),
         });
     }
 

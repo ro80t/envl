@@ -7,6 +7,7 @@ mod lexer_test {
     fn generate_tokens(code: String) -> Vec<Value> {
         let lex = Lexer::new("test.envl".to_string(), code);
         lex.generate()
+            .0
             .into_iter()
             .map(|t| t.value)
             .collect::<Vec<_>>()

@@ -1,4 +1,5 @@
 use envl_config::{generate_ast as gen_config_ast, misc::config::Config};
+use envl_utils::types::FilePosition;
 use envl_utils::variable::{Type, Value};
 use envl_utils::{error::EnvlError, types::Position};
 use envl_vars::{generate_ast as gen_vars_ast, misc::variable::Variable};
@@ -54,8 +55,14 @@ pub fn load_envl_with_options(
                                         err,
                                         Position {
                                             file_path: file!().to_string(),
-                                            row: line!() as usize,
-                                            col: column!() as usize,
+                                            start: FilePosition {
+                                                row: line!() as usize,
+                                                col: column!() as usize,
+                                            },
+                                            end: FilePosition {
+                                                row: line!() as usize,
+                                                col: column!() as usize,
+                                            },
                                         },
                                     )))
                                 } else {
@@ -66,8 +73,14 @@ pub fn load_envl_with_options(
                                 err,
                                 Position {
                                     file_path: file!().to_string(),
-                                    row: line!() as usize,
-                                    col: column!() as usize,
+                                    start: FilePosition {
+                                        row: line!() as usize,
+                                        col: column!() as usize,
+                                    },
+                                    end: FilePosition {
+                                        row: line!() as usize,
+                                        col: column!() as usize,
+                                    },
                                 },
                             ))),
                         },
@@ -81,8 +94,14 @@ pub fn load_envl_with_options(
             err,
             Position {
                 file_path: file!().to_string(),
-                row: line!() as usize,
-                col: column!() as usize,
+                start: FilePosition {
+                    row: line!() as usize,
+                    col: column!() as usize,
+                },
+                end: FilePosition {
+                    row: line!() as usize,
+                    col: column!() as usize,
+                },
             },
         ))),
     }

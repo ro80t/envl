@@ -1,4 +1,4 @@
-use envl_utils::types::Position;
+use envl_utils::types::{FilePosition, Position};
 
 use crate::misc::token::{Token, Value};
 
@@ -14,8 +14,10 @@ impl Lexer {
         Self { file_path, code }
     }
 
-    pub fn generate(&self) -> Vec<Token> {
+    pub fn generate(&self) -> (Vec<Token>, FilePosition) {
         let mut tokens = Vec::new();
+        let mut start_row = 1;
+        let mut start_col = 0;
         let mut row = 1;
         let mut col = 0;
         let mut in_quote = false;
@@ -36,8 +38,11 @@ impl Lexer {
                     value: Value::Comment(current_token.clone()),
                     position: Position {
                         file_path: self.file_path.clone(),
-                        row,
-                        col,
+                        start: FilePosition {
+                            row: start_row,
+                            col: start_col,
+                        },
+                        end: FilePosition { row, col },
                     },
                 });
                 current_token.clear();
@@ -51,11 +56,18 @@ impl Lexer {
             }
 
             col += 1;
+            if !in_quote && !is_comment && !is_escape && !current_token.is_empty() {
+                start_row = row;
+                start_col = col;
+            }
 
             let position = Position {
                 file_path: self.file_path.clone(),
-                row,
-                col,
+                start: FilePosition {
+                    row: start_row,
+                    col: start_col,
+                },
+                end: FilePosition { row, col },
             };
 
             if is_escape {
@@ -206,6 +218,6 @@ impl Lexer {
             }
         }
 
-        tokens
+        (tokens, FilePosition { row, col })
     }
 }
