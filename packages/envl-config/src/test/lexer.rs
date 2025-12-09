@@ -1,8 +1,8 @@
 #[cfg(test)]
 mod lexer_test {
-    use envl_utils::variable::Type;
+    use envl_utils::{types::{FilePosition, Position}, variable::Type};
 
-    use crate::{lexer::Lexer, misc::token::Value};
+    use crate::{lexer::Lexer, misc::token::{Token, Value}};
 
     fn generate_tokens(code: String) -> Vec<Value> {
         let lex = Lexer::new("test.envl".to_string(), code);
@@ -11,6 +11,86 @@ mod lexer_test {
             .into_iter()
             .map(|t| t.value)
             .collect::<Vec<_>>()
+    }
+
+    #[test]
+    fn position_test() {
+        let lex = Lexer::new("test.envl".to_string(), include_str!("./files/position.test.envl").to_string());
+        let tokens = lex.generate().0;
+
+        macro_rules! gen_position {
+            ($row: expr, $col: expr, $end_row: expr, $end_col: expr) => {{
+                Position {
+                    file_path: "test.envl".to_string(),
+                    start: FilePosition {
+                        col: $col,
+                        row: $row,
+                    },
+                    end: FilePosition {
+                        col: $end_col,
+                        row: $end_row,
+                    },
+                }
+            }};
+        }
+
+        assert_eq!(
+            tokens,
+            vec![
+                Token {
+                    value: Value::Settings,
+                    position: gen_position!(1, 1, 1, 8),
+                },
+                Token {
+                    value: Value::LeftCurlyBracket,
+                    position: gen_position!(1, 10, 1, 10),
+                },
+                Token {
+                    value: Value::RightCurlyBracket,
+                    position: gen_position!(1, 11, 1, 11),
+                },
+                Token {
+                    value: Value::Vars,
+                    position: gen_position!(3, 1, 3, 4),
+                },
+                Token {
+                    value: Value::LeftCurlyBracket,
+                    position: gen_position!(3, 6, 3, 6),
+                },
+                Token {
+                    value: Value::Ident("a".to_string()),
+                    position: gen_position!(4, 5, 4, 5),
+                },
+                Token {
+                    value: Value::Colon,
+                    position: gen_position!(4, 6, 4, 6),
+                },
+                Token {
+                    value: Value::Option,
+                    position: gen_position!(4, 8, 4, 13),
+                },
+                Token {
+                    value: Value::LeftShift,
+                    position: gen_position!(4, 14, 4, 14),
+                },
+                Token {
+                    value: Value::Type(Type::Bool),
+                    position: gen_position!(4, 15, 4, 18),
+                },
+                Token {
+                    value: Value::RightShift,
+                    position: gen_position!(4, 19, 4, 19),
+                },
+                Token {
+                    value: Value::Comma,
+                    position: gen_position!(4, 20, 4, 20),
+                },
+                Token {
+                    value: Value::RightCurlyBracket,
+                    position: gen_position!(5, 1, 5, 1),
+                },
+            ]
+        )
     }
 
     #[test]
