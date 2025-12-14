@@ -1,8 +1,14 @@
 #[cfg(test)]
 mod lexer_test {
-    use envl_utils::{types::{FilePosition, Position}, variable::Type};
+    use envl_utils::{
+        types::{FilePosition, Position},
+        variable::Type,
+    };
 
-    use crate::{lexer::Lexer, misc::token::{Token, Value}};
+    use crate::{
+        lexer::Lexer,
+        misc::token::{Token, Value},
+    };
 
     fn generate_tokens(code: String) -> Vec<Value> {
         let lex = Lexer::new("test.envl".to_string(), code);
@@ -15,7 +21,10 @@ mod lexer_test {
 
     #[test]
     fn position_test() {
-        let lex = Lexer::new("test.envl".to_string(), include_str!("./files/position.test.envl").to_string());
+        let lex = Lexer::new(
+            "test.envl".to_string(),
+            include_str!("./files/position.test.envl").to_string(),
+        );
         let tokens = lex.generate().0;
 
         macro_rules! gen_position {

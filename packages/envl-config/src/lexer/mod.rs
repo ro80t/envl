@@ -1,6 +1,9 @@
 use envl_utils::types::{FilePosition, Position};
 
-use crate::misc::token::{Token, Value};
+use crate::{
+    lexer::current_token::{CurrentToken, Push},
+    misc::token::{Token, Value},
+};
 
 pub mod current_token;
 
@@ -16,34 +19,31 @@ impl Lexer {
 
     pub fn generate(&self) -> (Vec<Token>, FilePosition) {
         let mut tokens = Vec::new();
-        let mut start_row = 1;
-        let mut start_col = 0;
         let mut row = 1;
-        let mut col = 0;
+        let mut col = 1;
         let mut in_quote = false;
         let mut is_comment = false;
         let mut is_escape = false;
         let mut start_quote = char::default();
-        let mut current_token = String::new();
+        let mut current_token = CurrentToken::default();
 
         'lexer_loop: for (i, c) in self.code.char_indices() {
             let is_last = self.code.len() == (i + 1);
             let mut is_others = false;
+            let mut file_pos = FilePosition { row, col };
+            let mut curr_token_pos = Position {
+                file_path: self.file_path.clone(),
+                start: current_token.start.clone(),
+                end: file_pos.clone(),
+            };
 
             if is_comment && (c == '\n' || is_last) {
                 if c != '\n' && is_last {
-                    current_token.push(c);
+                    current_token.push(c, FilePosition { row, col });
                 }
                 tokens.push(Token {
-                    value: Value::Comment(current_token.clone()),
-                    position: Position {
-                        file_path: self.file_path.clone(),
-                        start: FilePosition {
-                            row: start_row,
-                            col: start_col,
-                        },
-                        end: FilePosition { row, col },
-                    },
+                    value: Value::Comment(current_token.token.clone()),
+                    position: curr_token_pos.clone(),
                 });
                 current_token.clear();
                 is_comment = false;
@@ -51,39 +51,44 @@ impl Lexer {
 
             if c == '\n' {
                 row += 1;
-                col = 0;
+                col = 1;
                 continue;
             }
 
-            col += 1;
-            if !in_quote && !is_comment && !is_escape && !current_token.is_empty() {
-                start_row = row;
-                start_col = col;
-            }
+            file_pos = FilePosition { row, col };
+            curr_token_pos = Position {
+                file_path: self.file_path.clone(),
+                start: current_token.start.clone(),
+                end: if c.is_whitespace() {
+                    FilePosition { row, col: col - 1 }
+                } else {
+                    file_pos.clone()
+                },
+            };
 
             let position = Position {
                 file_path: self.file_path.clone(),
-                start: FilePosition {
-                    row: start_row,
-                    col: start_col,
-                },
-                end: FilePosition { row, col },
+                start: file_pos.clone(),
+                end: file_pos.clone(),
             };
 
             if is_escape {
-                current_token.push(match c {
-                    'n' => '\n',
-                    't' => '\t',
-                    'r' => '\r',
-                    '0' => '\0',
-                    _ => c,
-                });
+                current_token.push(
+                    match c {
+                        'n' => '\n',
+                        't' => '\t',
+                        'r' => '\r',
+                        '0' => '\0',
+                        _ => c,
+                    },
+                    file_pos,
+                );
                 is_escape = false;
                 continue;
             }
 
             if (in_quote && c != '"' && c != '\'') || is_comment {
-                current_token.push(c);
+                current_token.push(c, file_pos);
                 continue;
             }
 
@@ -94,10 +99,10 @@ impl Lexer {
                             value: Value::Ident(format!(
                                 "{}{}{}",
                                 start_quote,
-                                current_token.clone(),
+                                current_token.token.clone(),
                                 c
                             )),
-                            position: position.clone(),
+                            position: curr_token_pos.clone(),
                         });
                         start_quote = char::default();
                     } else {
@@ -170,11 +175,11 @@ impl Lexer {
                     });
                 }
                 '/' => {
-                    if current_token == "/" {
+                    if current_token.token == "/" {
                         is_comment = true;
                         current_token.clear();
                     } else {
-                        current_token.push(c);
+                        current_token.push(c, file_pos.clone());
                         continue 'lexer_loop;
                     }
                 }
@@ -194,13 +199,13 @@ impl Lexer {
                     if other.is_whitespace() && !in_quote && !is_comment {
                         if !current_token.is_empty() {
                             tokens.push(Token {
-                                value: self.lex_current_token(current_token.clone()),
-                                position: position.clone(),
+                                value: self.lex_current_token(current_token.token.clone()),
+                                position: curr_token_pos.clone(),
                             });
                             current_token.clear();
                         }
                     } else {
-                        current_token.push(c);
+                        current_token.push(c, file_pos);
                     }
                     is_others = true;
                 }
@@ -210,12 +215,21 @@ impl Lexer {
                 tokens.insert(
                     tokens.len() - 1,
                     Token {
-                        value: self.lex_current_token(current_token.clone()),
-                        position,
+                        value: self.lex_current_token(current_token.token.clone()),
+                        position: if is_others {
+                            curr_token_pos
+                        } else {
+                            Position {
+                                end: FilePosition { row, col: col - 1 },
+                                ..curr_token_pos
+                            }
+                        },
                     },
                 );
                 current_token.clear();
             }
+
+            col += 1;
         }
 
         (tokens, FilePosition { row, col })
