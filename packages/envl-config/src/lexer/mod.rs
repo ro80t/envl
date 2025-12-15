@@ -1,9 +1,9 @@
-use envl_utils::types::{FilePosition, Position};
-
-use crate::{
-    lexer::current_token::{CurrentToken, Push},
-    misc::token::{Token, Value},
+use envl_utils::{
+    curr_token::{CurrentToken, Push},
+    types::{FilePosition, Position},
 };
+
+use crate::misc::token::{Token, Value};
 
 pub mod current_token;
 
