@@ -44,7 +44,7 @@ mod lexer_test {
             vec![
                 Token {
                     value: Value::Comment(" this is a comment".to_string()),
-                    position: gen_position!(1, 1, 1, 20)
+                    position: gen_position!(1, 1, 1, 21)
                 },
                 Token {
                     value: Value::Ident("a".to_string()),

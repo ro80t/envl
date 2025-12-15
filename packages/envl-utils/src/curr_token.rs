@@ -11,6 +11,14 @@ pub struct CurrentToken {
 }
 
 impl CurrentToken {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn set_pos(&mut self, pos: FilePosition) {
+        self.start = pos;
+    }
+
     pub fn clear(&mut self) {
         self.token.clear();
         self.start = FilePosition::default();

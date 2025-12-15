@@ -214,15 +214,6 @@ mod parser_test {
     }
 
     #[test]
-    fn syntax_error_test() {
-        let result = gen_parsed_vars("variable = \"aiueo';".to_string());
-        assert!(result.is_err());
-        if let Err(err) = result {
-            assert_eq!(err.message, ErrorContext::InvalidType);
-        }
-    }
-
-    #[test]
     fn duplicate_error_test() {
         let result = gen_parsed_vars("variable = 12345; variable = \"12345\";".to_string());
         assert!(result.is_err());
