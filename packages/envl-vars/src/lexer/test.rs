@@ -1,6 +1,11 @@
 #[cfg(test)]
 mod lexer_test {
-    use crate::{lexer::Lexer, misc::token::Value};
+    use envl_utils::types::{FilePosition, Position};
+
+    use crate::{
+        lexer::Lexer,
+        misc::token::{Token, Value},
+    };
 
     fn generate_tokens(code: String) -> Vec<Value> {
         let lex = Lexer::new("test.envl".to_string(), code);
@@ -8,6 +13,73 @@ mod lexer_test {
             .into_iter()
             .map(|t| t.value)
             .collect::<Vec<_>>()
+    }
+
+    #[test]
+    fn position_test() {
+        let lex = Lexer::new(
+            "test.envl".to_string(),
+            include_str!("./files/position.test.envl").to_string(),
+        );
+        let tokens = lex.generate();
+
+        macro_rules! gen_position {
+            ($row: expr, $col: expr, $end_row: expr, $end_col: expr) => {{
+                Position {
+                    file_path: "test.envl".to_string(),
+                    start: FilePosition {
+                        col: $col,
+                        row: $row,
+                    },
+                    end: FilePosition {
+                        col: $end_col,
+                        row: $end_row,
+                    },
+                }
+            }};
+        }
+
+        assert_eq!(
+            tokens,
+            vec![
+                Token {
+                    value: Value::Comment(" this is a comment".to_string()),
+                    position: gen_position!(1, 1, 1, 20)
+                },
+                Token {
+                    value: Value::Ident("a".to_string()),
+                    position: gen_position!(2, 1, 2, 1)
+                },
+                Token {
+                    value: Value::Equal,
+                    position: gen_position!(2, 3, 2, 3)
+                },
+                Token {
+                    value: Value::Ident("123".to_string()),
+                    position: gen_position!(2, 5, 2, 7)
+                },
+                Token {
+                    value: Value::Semi,
+                    position: gen_position!(2, 8, 2, 8)
+                },
+                Token {
+                    value: Value::Ident("b".to_string()),
+                    position: gen_position!(3, 1, 3, 1)
+                },
+                Token {
+                    value: Value::Equal,
+                    position: gen_position!(3, 3, 3, 3)
+                },
+                Token {
+                    value: Value::Ident("\"123\"".to_string()),
+                    position: gen_position!(3, 5, 3, 9)
+                },
+                Token {
+                    value: Value::Semi,
+                    position: gen_position!(3, 10, 3, 10)
+                },
+            ]
+        )
     }
 
     #[test]

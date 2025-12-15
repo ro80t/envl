@@ -15,7 +15,7 @@ pub(crate) enum Value {
     Semi,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub(crate) struct Token {
     pub value: Value,
     pub position: Position,
