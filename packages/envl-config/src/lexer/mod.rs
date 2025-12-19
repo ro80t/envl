@@ -39,11 +39,18 @@ impl Lexer {
 
             if is_comment && (c == '\n' || is_last) {
                 if c != '\n' && is_last {
-                    current_token.push(c, FilePosition { row, col });
+                    current_token.push(c, file_pos.clone());
                 }
                 tokens.push(Token {
-                    value: Value::Comment(current_token.token.clone()),
-                    position: curr_token_pos.clone(),
+                    value: Value::Comment(current_token.token.clone().chars().skip(2).collect()),
+                    position: if c == '\n' {
+                        Position {
+                            end: FilePosition { row, col: col - 1 },
+                            ..curr_token_pos.clone()
+                        }
+                    } else {
+                        curr_token_pos.clone()
+                    },
                 });
                 current_token.clear();
                 is_comment = false;
@@ -87,8 +94,9 @@ impl Lexer {
                 continue;
             }
 
-            if (in_quote && c != '"' && c != '\'') || is_comment {
+            if (in_quote && c != start_quote) || is_comment {
                 current_token.push(c, file_pos);
+                col += 1;
                 continue;
             }
 
@@ -102,7 +110,13 @@ impl Lexer {
                                 current_token.token.clone(),
                                 c
                             )),
-                            position: curr_token_pos.clone(),
+                            position: Position {
+                                start: FilePosition {
+                                    col: current_token.start.col - 1,
+                                    ..current_token.start
+                                },
+                                ..curr_token_pos.clone()
+                            },
                         });
                         start_quote = char::default();
                     } else {
@@ -175,11 +189,10 @@ impl Lexer {
                     });
                 }
                 '/' => {
+                    current_token.push(c, file_pos.clone());
                     if current_token.token == "/" {
                         is_comment = true;
-                        current_token.clear();
                     } else {
-                        current_token.push(c, file_pos.clone());
                         continue 'lexer_loop;
                     }
                 }

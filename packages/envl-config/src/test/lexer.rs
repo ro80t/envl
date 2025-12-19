@@ -47,56 +47,60 @@ mod lexer_test {
             tokens,
             vec![
                 Token {
+                    value: Value::Comment(" this is a comment".to_string()),
+                    position: gen_position!(1, 1, 1, 20),
+                },
+                Token {
                     value: Value::Settings,
-                    position: gen_position!(1, 1, 1, 8),
+                    position: gen_position!(3, 1, 3, 8),
                 },
                 Token {
                     value: Value::LeftCurlyBracket,
-                    position: gen_position!(1, 10, 1, 10),
+                    position: gen_position!(3, 10, 3, 10),
                 },
                 Token {
                     value: Value::RightCurlyBracket,
-                    position: gen_position!(1, 11, 1, 11),
+                    position: gen_position!(3, 11, 3, 11),
                 },
                 Token {
                     value: Value::Vars,
-                    position: gen_position!(3, 1, 3, 4),
+                    position: gen_position!(5, 1, 5, 4),
                 },
                 Token {
                     value: Value::LeftCurlyBracket,
-                    position: gen_position!(3, 6, 3, 6),
+                    position: gen_position!(5, 6, 5, 6),
                 },
                 Token {
                     value: Value::Ident("a".to_string()),
-                    position: gen_position!(4, 5, 4, 5),
+                    position: gen_position!(6, 5, 6, 5),
                 },
                 Token {
                     value: Value::Colon,
-                    position: gen_position!(4, 6, 4, 6),
+                    position: gen_position!(6, 6, 6, 6),
                 },
                 Token {
                     value: Value::Option,
-                    position: gen_position!(4, 8, 4, 13),
+                    position: gen_position!(6, 8, 6, 13),
                 },
                 Token {
                     value: Value::LeftShift,
-                    position: gen_position!(4, 14, 4, 14),
+                    position: gen_position!(6, 14, 6, 14),
                 },
                 Token {
                     value: Value::Type(Type::Bool),
-                    position: gen_position!(4, 15, 4, 18),
+                    position: gen_position!(6, 15, 6, 18),
                 },
                 Token {
                     value: Value::RightShift,
-                    position: gen_position!(4, 19, 4, 19),
+                    position: gen_position!(6, 19, 6, 19),
                 },
                 Token {
                     value: Value::Comma,
-                    position: gen_position!(4, 20, 4, 20),
+                    position: gen_position!(6, 20, 6, 20),
                 },
                 Token {
                     value: Value::RightCurlyBracket,
-                    position: gen_position!(5, 1, 5, 1),
+                    position: gen_position!(7, 1, 7, 1),
                 },
             ]
         )
