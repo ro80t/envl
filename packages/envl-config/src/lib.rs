@@ -16,7 +16,7 @@ pub fn generate_ast(file_path: String, code: String) -> Result<Config, EnvlError
     let parser = Parser::new(
         Position {
             file_path,
-            start: FilePosition { col: 0, row: 1 },
+            start: FilePosition { col: 1, row: 1 },
             end: file_end_pos,
         },
         tokens,
