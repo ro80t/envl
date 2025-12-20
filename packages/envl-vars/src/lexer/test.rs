@@ -78,6 +78,38 @@ mod lexer_test {
                     value: Value::Semi,
                     position: gen_position!(3, 10, 3, 10)
                 },
+                Token {
+                    value: Value::Ident("c".to_string()),
+                    position: gen_position!(4, 1, 4, 1)
+                },
+                Token {
+                    value: Value::Equal,
+                    position: gen_position!(4, 3, 4, 3)
+                },
+                Token {
+                    value: Value::LeftSquareBracket,
+                    position: gen_position!(4, 5, 4, 5)
+                },
+                Token {
+                    value: Value::Ident("\"123\"".to_string()),
+                    position: gen_position!(4, 7, 4, 11)
+                },
+                Token {
+                    value: Value::Comma,
+                    position: gen_position!(4, 12, 4, 12)
+                },
+                Token {
+                    value: Value::Ident("\"456\"".to_string()),
+                    position: gen_position!(4, 14, 4, 18)
+                },
+                Token {
+                    value: Value::RightSquareBracket,
+                    position: gen_position!(4, 20, 4, 20)
+                },
+                Token {
+                    value: Value::Semi,
+                    position: gen_position!(4, 21, 4, 21)
+                },
             ]
         )
     }
