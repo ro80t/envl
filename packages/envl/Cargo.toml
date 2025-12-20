@@ -12,7 +12,7 @@ rust-version.workspace = true
 [dependencies]
 envl-codeblock.workspace = true
 envl-config.workspace = true
-envl-vars.workspace = true
+envl-variables.workspace = true
 envl-utils.workspace = true
 proc-macro2.workspace = true
 quote.workspace = true

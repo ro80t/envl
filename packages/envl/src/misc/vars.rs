@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use envl_utils::types::Position;
-use envl_vars::misc::variable::{Variable, VariableValue};
+use envl_variables::misc::variable::{Variable, VariableValue};
 
 #[derive(Debug, Clone)]
 pub struct Value {

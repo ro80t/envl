@@ -2,7 +2,7 @@ use envl_config::{generate_ast as gen_config_ast, misc::config::Config};
 use envl_utils::types::FilePosition;
 use envl_utils::variable::{Type, Value};
 use envl_utils::{error::EnvlError, types::Position};
-use envl_vars::{generate_ast as gen_vars_ast, misc::variable::Variable};
+use envl_variables::{generate_ast as gen_vars_ast, misc::variable::Variable};
 use std::{collections::HashMap, env::current_dir, path::PathBuf};
 
 use crate::vars::gen_vars;

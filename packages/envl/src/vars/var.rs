@@ -4,7 +4,7 @@ use envl_utils::{
     error::{EnvlError, ErrorContext},
     variable::{Type, Value as VariableHmValue},
 };
-use envl_vars::misc::variable::VariableValue;
+use envl_variables::misc::variable::VariableValue;
 
 use crate::misc::vars::Value;
 

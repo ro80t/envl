@@ -166,7 +166,7 @@ dependencies = [
  "envl-codeblock",
  "envl-config",
  "envl-utils",
- "envl-vars",
+ "envl-variables",
  "proc-macro2",
  "quote",
  "syn",
@@ -217,7 +217,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "envl-vars"
+name = "envl-variables"
 version = "0.11.1"
 dependencies = [
  "envl-utils",

@@ -1,0 +1,13 @@
+[package]
+name = "envl-variables"
+version.workspace = true
+description = "parser and lexer for .envl file."
+repository.workspace = true
+license.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[lib]
+
+[dependencies]
+envl-utils.workspace = true
