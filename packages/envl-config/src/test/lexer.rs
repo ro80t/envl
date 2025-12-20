@@ -99,8 +99,36 @@ mod lexer_test {
                     position: gen_position!(6, 20, 6, 20),
                 },
                 Token {
+                    value: Value::Ident("b".to_string()),
+                    position: gen_position!(7, 5, 7, 5),
+                },
+                Token {
+                    value: Value::Colon,
+                    position: gen_position!(7, 6, 7, 6),
+                },
+                Token {
+                    value: Value::Array,
+                    position: gen_position!(7, 8, 7, 12),
+                },
+                Token {
+                    value: Value::LeftShift,
+                    position: gen_position!(7, 13, 7, 13),
+                },
+                Token {
+                    value: Value::Type(Type::String),
+                    position: gen_position!(7, 14, 7, 19),
+                },
+                Token {
+                    value: Value::RightShift,
+                    position: gen_position!(7, 20, 7, 20),
+                },
+                Token {
+                    value: Value::Comma,
+                    position: gen_position!(7, 21, 7, 21),
+                },
+                Token {
                     value: Value::RightCurlyBracket,
-                    position: gen_position!(7, 1, 7, 1),
+                    position: gen_position!(8, 1, 8, 1),
                 },
             ]
         )
