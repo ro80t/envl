@@ -2,7 +2,7 @@ use std::slice::Iter;
 
 use envl_utils::{
     error::{EnvlError, ErrorContext},
-    types::Position,
+    types::{FilePosition, Position},
     variable::Type,
 };
 
@@ -133,9 +133,9 @@ impl Parser {
             Err(EnvlError {
                 message: ErrorContext::InvalidType,
                 position: Position {
-                    file_path: self.file_path.to_owned(),
-                    col: 0,
-                    row: 0,
+                    file_path: self.position.file_path.to_owned(),
+                    start: FilePosition { row: 0, col: 0 },
+                    end: self.position.end.clone(),
                 },
             })
         }

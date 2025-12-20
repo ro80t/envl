@@ -1,0 +1,8 @@
+// this is a comment
+
+settings {}
+
+vars {
+    a: Option<bool>,
+    b: Array<string>,
+}

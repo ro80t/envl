@@ -1,6 +1,6 @@
 use envl_utils::{
     error::{EnvlError, ErrorContext},
-    types::Position,
+    types::{FilePosition, Position},
 };
 
 use crate::misc::{
@@ -14,16 +14,17 @@ pub mod var;
 pub mod vars;
 
 pub(crate) struct Parser {
-    pub file_path: String,
+    pub position: Position,
     pub tokens: Vec<Token>,
 }
 
 impl Parser {
-    pub fn new(file_path: String, tokens: Vec<Token>) -> Self {
-        Self { file_path, tokens }
+    pub fn new(position: Position, tokens: Vec<Token>) -> Self {
+        Self { position, tokens }
     }
 
     pub fn parse(&self) -> Result<Config, EnvlError> {
+        let file_path = self.position.file_path.clone();
         let mut based_token = vec![];
 
         for token in self.tokens.iter() {
@@ -89,9 +90,9 @@ impl Parser {
             _ => Err(EnvlError {
                 message: ErrorContext::Required("Settings and vars".to_string()),
                 position: Position {
-                    file_path: self.file_path.clone(),
-                    row: 0,
-                    col: 0,
+                    file_path: file_path.clone(),
+                    start: FilePosition { row: 0, col: 0 },
+                    end: self.position.end.clone(),
                 },
             }),
         }

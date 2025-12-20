@@ -4,7 +4,10 @@ use std::{
     path::Path,
 };
 
-use envl_utils::{error::EnvlError, types::Position};
+use envl_utils::{
+    error::EnvlError,
+    types::{FilePosition, Position},
+};
 
 use crate::misc::error::convert_io_error;
 
@@ -19,8 +22,14 @@ pub fn read_file(file_path: String) -> Result<String, Box<EnvlError>> {
             err,
             Position {
                 file_path: file!().to_string(),
-                row: line!() as usize,
-                col: column!() as usize,
+                start: FilePosition {
+                    row: line!() as usize,
+                    col: column!() as usize,
+                },
+                end: FilePosition {
+                    row: line!() as usize,
+                    col: column!() as usize,
+                },
             },
         ))),
     }

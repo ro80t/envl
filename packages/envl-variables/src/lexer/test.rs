@@ -1,0 +1,338 @@
+#[cfg(test)]
+mod lexer_test {
+    use envl_utils::types::{FilePosition, Position};
+
+    use crate::{
+        lexer::Lexer,
+        misc::token::{Token, Value},
+    };
+
+    fn generate_tokens(code: String) -> Vec<Value> {
+        let lex = Lexer::new("test.envl".to_string(), code);
+        lex.generate()
+            .into_iter()
+            .map(|t| t.value)
+            .collect::<Vec<_>>()
+    }
+
+    #[test]
+    fn position_test() {
+        let lex = Lexer::new(
+            "test.envl".to_string(),
+            include_str!("./files/position.test.envl").to_string(),
+        );
+        let tokens = lex.generate();
+
+        macro_rules! gen_position {
+            ($row: expr, $col: expr, $end_row: expr, $end_col: expr) => {{
+                Position {
+                    file_path: "test.envl".to_string(),
+                    start: FilePosition {
+                        col: $col,
+                        row: $row,
+                    },
+                    end: FilePosition {
+                        col: $end_col,
+                        row: $end_row,
+                    },
+                }
+            }};
+        }
+
+        assert_eq!(
+            tokens,
+            vec![
+                Token {
+                    value: Value::Comment(" this is a comment".to_string()),
+                    position: gen_position!(1, 1, 1, 21)
+                },
+                Token {
+                    value: Value::Ident("a".to_string()),
+                    position: gen_position!(2, 1, 2, 1)
+                },
+                Token {
+                    value: Value::Equal,
+                    position: gen_position!(2, 3, 2, 3)
+                },
+                Token {
+                    value: Value::Ident("123".to_string()),
+                    position: gen_position!(2, 5, 2, 7)
+                },
+                Token {
+                    value: Value::Semi,
+                    position: gen_position!(2, 8, 2, 8)
+                },
+                Token {
+                    value: Value::Ident("b".to_string()),
+                    position: gen_position!(3, 1, 3, 1)
+                },
+                Token {
+                    value: Value::Equal,
+                    position: gen_position!(3, 3, 3, 3)
+                },
+                Token {
+                    value: Value::Ident("\"123\"".to_string()),
+                    position: gen_position!(3, 5, 3, 9)
+                },
+                Token {
+                    value: Value::Semi,
+                    position: gen_position!(3, 10, 3, 10)
+                },
+                Token {
+                    value: Value::Ident("c".to_string()),
+                    position: gen_position!(4, 1, 4, 1)
+                },
+                Token {
+                    value: Value::Equal,
+                    position: gen_position!(4, 3, 4, 3)
+                },
+                Token {
+                    value: Value::LeftSquareBracket,
+                    position: gen_position!(4, 5, 4, 5)
+                },
+                Token {
+                    value: Value::Ident("\"123\"".to_string()),
+                    position: gen_position!(4, 7, 4, 11)
+                },
+                Token {
+                    value: Value::Comma,
+                    position: gen_position!(4, 12, 4, 12)
+                },
+                Token {
+                    value: Value::Ident("\"456\"".to_string()),
+                    position: gen_position!(4, 14, 4, 18)
+                },
+                Token {
+                    value: Value::RightSquareBracket,
+                    position: gen_position!(4, 20, 4, 20)
+                },
+                Token {
+                    value: Value::Semi,
+                    position: gen_position!(4, 21, 4, 21)
+                },
+                Token {
+                    value: Value::Ident("test_struct".to_string()),
+                    position: gen_position!(5, 1, 5, 11)
+                },
+                Token {
+                    value: Value::Equal,
+                    position: gen_position!(5, 13, 5, 13)
+                },
+                Token {
+                    value: Value::Struct,
+                    position: gen_position!(5, 15, 5, 20)
+                },
+                Token {
+                    value: Value::LeftCurlyBracket,
+                    position: gen_position!(5, 22, 5, 22)
+                },
+                Token {
+                    value: Value::Ident("a".to_string()),
+                    position: gen_position!(6, 5, 6, 5)
+                },
+                Token {
+                    value: Value::Colon,
+                    position: gen_position!(6, 6, 6, 6)
+                },
+                Token {
+                    value: Value::Ident("true".to_string()),
+                    position: gen_position!(6, 8, 6, 11)
+                },
+                Token {
+                    value: Value::Comma,
+                    position: gen_position!(6, 12, 6, 12)
+                },
+                Token {
+                    value: Value::Ident("b".to_string()),
+                    position: gen_position!(7, 5, 7, 5)
+                },
+                Token {
+                    value: Value::Colon,
+                    position: gen_position!(7, 6, 7, 6)
+                },
+                Token {
+                    value: Value::Ident("123".to_string()),
+                    position: gen_position!(7, 8, 7, 10)
+                },
+                Token {
+                    value: Value::Comma,
+                    position: gen_position!(7, 11, 7, 11)
+                },
+                Token {
+                    value: Value::Ident("c_test".to_string()),
+                    position: gen_position!(8, 5, 8, 10)
+                },
+                Token {
+                    value: Value::Colon,
+                    position: gen_position!(8, 11, 8, 11)
+                },
+                Token {
+                    value: Value::Ident("\"123\"".to_string()),
+                    position: gen_position!(8, 13, 8, 17)
+                },
+                Token {
+                    value: Value::Comma,
+                    position: gen_position!(8, 18, 8, 18)
+                },
+                Token {
+                    value: Value::RightCurlyBracket,
+                    position: gen_position!(9, 1, 9, 1)
+                },
+                Token {
+                    value: Value::Semi,
+                    position: gen_position!(9, 2, 9, 2)
+                },
+            ]
+        )
+    }
+
+    #[test]
+    fn number_test() {
+        let tokens = generate_tokens("variable = 12345;".to_string());
+        let expect_arr = vec![
+            Value::Ident("variable".to_string()),
+            Value::Equal,
+            Value::Ident("12345".to_string()),
+            Value::Semi,
+        ];
+        assert_eq!(tokens, expect_arr);
+    }
+
+    #[test]
+    fn string_test() {
+        let tokens = generate_tokens("variable = \"12345\";".to_string());
+        let expect_arr = vec![
+            Value::Ident("variable".to_string()),
+            Value::Equal,
+            Value::Ident("\"12345\"".to_string()),
+            Value::Semi,
+        ];
+        assert_eq!(tokens, expect_arr);
+    }
+
+    #[test]
+    fn char_test() {
+        let tokens = generate_tokens("variable = 'a';".to_string());
+        let expect_arr = vec![
+            Value::Ident("variable".to_string()),
+            Value::Equal,
+            Value::Ident("'a'".to_string()),
+            Value::Semi,
+        ];
+        assert_eq!(tokens, expect_arr);
+    }
+
+    #[test]
+    fn bool_test() {
+        let tokens = generate_tokens("variable = true; variable2 = false;".to_string());
+        let expect_arr = vec![
+            Value::Ident("variable".to_string()),
+            Value::Equal,
+            Value::Ident("true".to_string()),
+            Value::Semi,
+            Value::Ident("variable2".to_string()),
+            Value::Equal,
+            Value::Ident("false".to_string()),
+            Value::Semi,
+        ];
+        assert_eq!(tokens, expect_arr);
+    }
+
+    #[test]
+    fn array_test() {
+        let tokens = generate_tokens("variable = [ \"abc\", 'a', 12345, true ];".to_string());
+        let expect_arr = vec![
+            Value::Ident("variable".to_string()),
+            Value::Equal,
+            Value::LeftSquareBracket,
+            Value::Ident("\"abc\"".to_string()),
+            Value::Comma,
+            Value::Ident("'a'".to_string()),
+            Value::Comma,
+            Value::Ident("12345".to_string()),
+            Value::Comma,
+            Value::Ident("true".to_string()),
+            Value::RightSquareBracket,
+            Value::Semi,
+        ];
+        assert_eq!(tokens, expect_arr);
+    }
+
+    #[test]
+    fn double_array() {
+        let tokens = generate_tokens("variable = [ [ 123 ], [\"456\"] ];".to_string());
+        let expect_arr = vec![
+            Value::Ident("variable".to_string()),
+            Value::Equal,
+            Value::LeftSquareBracket,
+            Value::LeftSquareBracket,
+            Value::Ident("123".to_string()),
+            Value::RightSquareBracket,
+            Value::Comma,
+            Value::LeftSquareBracket,
+            Value::Ident("\"456\"".to_string()),
+            Value::RightSquareBracket,
+            Value::RightSquareBracket,
+            Value::Semi,
+        ];
+        assert_eq!(tokens, expect_arr);
+    }
+
+    #[test]
+    fn triple_array_test() {
+        let tokens = generate_tokens("variable = [ [ [ 123 ] ], [ [\"456\"] ] ];".to_string());
+        let expect_arr = vec![
+            Value::Ident("variable".to_string()),
+            Value::Equal,
+            Value::LeftSquareBracket,
+            Value::LeftSquareBracket,
+            Value::LeftSquareBracket,
+            Value::Ident("123".to_string()),
+            Value::RightSquareBracket,
+            Value::RightSquareBracket,
+            Value::Comma,
+            Value::LeftSquareBracket,
+            Value::LeftSquareBracket,
+            Value::Ident("\"456\"".to_string()),
+            Value::RightSquareBracket,
+            Value::RightSquareBracket,
+            Value::RightSquareBracket,
+            Value::Semi,
+        ];
+        assert_eq!(tokens, expect_arr);
+    }
+
+    #[test]
+    fn struct_test() {
+        let tokens = generate_tokens("variable = struct { abc: 12345, efg: true };".to_string());
+        let expect_arr = vec![
+            Value::Ident("variable".to_string()),
+            Value::Equal,
+            Value::Struct,
+            Value::LeftCurlyBracket,
+            Value::Ident("abc".to_string()),
+            Value::Colon,
+            Value::Ident("12345".to_string()),
+            Value::Comma,
+            Value::Ident("efg".to_string()),
+            Value::Colon,
+            Value::Ident("true".to_string()),
+            Value::RightCurlyBracket,
+            Value::Semi,
+        ];
+        assert_eq!(tokens, expect_arr);
+    }
+
+    #[test]
+    fn comment_test() {
+        let tokens = generate_tokens("variable = 12345; //this is a comment".to_string());
+        let expect_arr = vec![
+            Value::Ident("variable".to_string()),
+            Value::Equal,
+            Value::Ident("12345".to_string()),
+            Value::Semi,
+            Value::Comment("this is a comment".to_string()),
+        ];
+        assert_eq!(tokens, expect_arr);
+    }
+}

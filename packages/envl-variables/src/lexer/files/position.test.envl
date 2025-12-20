@@ -1,0 +1,9 @@
+// this is a comment
+a = 123;
+b = "123";
+c = [ "123", "456" ];
+test_struct = struct {
+    a: true,
+    b: 123,
+    c_test: "123",
+};

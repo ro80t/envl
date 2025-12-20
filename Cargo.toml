@@ -4,14 +4,14 @@ members = [
     "packages/envl-utils",
     "packages/envl-codeblock",
     "packages/envl-config",
-    "packages/envl-vars",
+    "packages/envl-variables",
     "packages/envl",
     "packages/envl-cli",
     "tests/envl-rs-test"
 ]
 
 [workspace.package]
-version = "0.11.0"
+version = "0.11.1"
 repository = "https://github.com/ROBOTofficial/envl"
 license = "MIT"
 edition = "2021"
@@ -27,16 +27,16 @@ syn = { version = "2.0.110", features = ["full", "extra-traits"] }
 napi = { version = "3.3.3" }
 napi-derive = { version = "3.3.3" }
 napi-build = { version = "2.3.1" }
-envl = { version = "0.11.0", path = "./packages/envl" }
-envl-vars = { version = "0.11.0", path = "./packages/envl-vars" }
-envl-config = { version = "0.11.0", path = "./packages/envl-config" }
-envl-codeblock = { version = "0.11.0", path = "./packages/envl-codeblock" }
-envl-utils = { version = "0.11.0", path = "./packages/envl-utils" }
+envl = { version = "0.11.1", path = "./packages/envl" }
+envl-variables = { version = "0.11.1", path = "./packages/envl-variables" }
+envl-config = { version = "0.11.1", path = "./packages/envl-config" }
+envl-codeblock = { version = "0.11.1", path = "./packages/envl-codeblock" }
+envl-utils = { version = "0.11.1", path = "./packages/envl-utils" }
 
 [patch.crates-io]
 envl = { path = "packages/envl" }
 envl-cli = { path = "packages/envl-cli" }
-envl-vars = { path = "packages/envl-vars" }
+envl-variables = { path = "packages/envl-variables" }
 envl-config = { path = "packages/envl-config" }
 envl-codeblock = { path = "packages/envl-codeblock" }
 envl-utils = { path = "packages/envl-utils" }

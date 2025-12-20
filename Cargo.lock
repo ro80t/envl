@@ -161,12 +161,12 @@ checksum = "f678cf4a922c215c63e0de95eb1ff08a958a81d47e485cf9da1e27bf6305cfa5"
 
 [[package]]
 name = "envl"
-version = "0.11.0"
+version = "0.11.1"
 dependencies = [
  "envl-codeblock",
  "envl-config",
  "envl-utils",
- "envl-vars",
+ "envl-variables",
  "proc-macro2",
  "quote",
  "syn",
@@ -185,7 +185,7 @@ dependencies = [
 
 [[package]]
 name = "envl-codeblock"
-version = "0.11.0"
+version = "0.11.1"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -195,7 +195,7 @@ dependencies = [
 
 [[package]]
 name = "envl-config"
-version = "0.11.0"
+version = "0.11.1"
 dependencies = [
  "envl-utils",
  "thiserror",
@@ -210,15 +210,15 @@ dependencies = [
 
 [[package]]
 name = "envl-utils"
-version = "0.11.0"
+version = "0.11.1"
 dependencies = [
  "regex",
  "thiserror",
 ]
 
 [[package]]
-name = "envl-vars"
-version = "0.11.0"
+name = "envl-variables"
+version = "0.11.1"
 dependencies = [
  "envl-utils",
 ]
