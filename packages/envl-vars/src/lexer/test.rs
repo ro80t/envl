@@ -110,6 +110,78 @@ mod lexer_test {
                     value: Value::Semi,
                     position: gen_position!(4, 21, 4, 21)
                 },
+                Token {
+                    value: Value::Ident("test_struct".to_string()),
+                    position: gen_position!(5, 1, 5, 11)
+                },
+                Token {
+                    value: Value::Equal,
+                    position: gen_position!(5, 13, 5, 13)
+                },
+                Token {
+                    value: Value::Struct,
+                    position: gen_position!(5, 15, 5, 20)
+                },
+                Token {
+                    value: Value::LeftCurlyBracket,
+                    position: gen_position!(5, 22, 5, 22)
+                },
+                Token {
+                    value: Value::Ident("a".to_string()),
+                    position: gen_position!(6, 5, 6, 5)
+                },
+                Token {
+                    value: Value::Colon,
+                    position: gen_position!(6, 6, 6, 6)
+                },
+                Token {
+                    value: Value::Ident("true".to_string()),
+                    position: gen_position!(6, 8, 6, 11)
+                },
+                Token {
+                    value: Value::Comma,
+                    position: gen_position!(6, 12, 6, 12)
+                },
+                Token {
+                    value: Value::Ident("b".to_string()),
+                    position: gen_position!(7, 5, 7, 5)
+                },
+                Token {
+                    value: Value::Colon,
+                    position: gen_position!(7, 6, 7, 6)
+                },
+                Token {
+                    value: Value::Ident("123".to_string()),
+                    position: gen_position!(7, 8, 7, 10)
+                },
+                Token {
+                    value: Value::Comma,
+                    position: gen_position!(7, 11, 7, 11)
+                },
+                Token {
+                    value: Value::Ident("c_test".to_string()),
+                    position: gen_position!(8, 5, 8, 10)
+                },
+                Token {
+                    value: Value::Colon,
+                    position: gen_position!(8, 11, 8, 11)
+                },
+                Token {
+                    value: Value::Ident("\"123\"".to_string()),
+                    position: gen_position!(8, 13, 8, 17)
+                },
+                Token {
+                    value: Value::Comma,
+                    position: gen_position!(8, 18, 8, 18)
+                },
+                Token {
+                    value: Value::RightCurlyBracket,
+                    position: gen_position!(9, 1, 9, 1)
+                },
+                Token {
+                    value: Value::Semi,
+                    position: gen_position!(9, 2, 9, 2)
+                },
             ]
         )
     }
