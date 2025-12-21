@@ -65,7 +65,9 @@ jobs:
         with:
           cacheFrom: ghcr.io/${{ github.repository }}
           push: never
-          runCmd: scripts/ci.sh
+          runCmd: |
+            ./INSTALL
+            ./scripts/ci.sh
 
   version:
     name: Version Check
