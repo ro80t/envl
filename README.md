@@ -1,4 +1,4 @@
-# Enviroment Language (envl)
+# Environment Variables Language (envl)
 
 ## Packages
 
