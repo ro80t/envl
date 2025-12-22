@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Setup
-        uses: ./.github/actions/setup.yml
+        uses: ./.github/workflows/setup
 
       - name: Check build
         run: scripts/build-release.sh
@@ -51,7 +51,7 @@ jobs:
 
     steps:
       - name: Setup
-        uses: ./.github/actions/setup.yml
+        uses: ./.github/workflows/setup
 
       - name: Install Packages
         run: bun ci
@@ -71,7 +71,7 @@ jobs:
 
     steps:
       - name: Setup
-        uses: ./.github/actions/setup.yml
+        uses: ./.github/workflows/setup
 
       - name: Install Packages (workspace)
         working-directory: ./
