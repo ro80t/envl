@@ -10,32 +10,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Cache cargo registry
-        uses: actions/cache@v5
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-
-      - name: Checkout Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
-      - name: Install tools
-        run: |
-            rustup component add clippy rustfmt
-            npm i -g bun @antfu/ni
-
-      - name: Install npm packages
-        run: bun install --frozen-lockfile
+      - name: Setup
+        uses: ./.github/actions/setup.yml
 
       - name: Check build
         run: scripts/build-release.sh
@@ -74,13 +50,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v6
-
-      - name: Checkout Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
+      - name: Setup
+        uses: ./.github/actions/setup.yml
 
       - name: Install Packages
         run: bun ci
@@ -99,29 +70,8 @@ jobs:
         working-directory: ./packages/envl-cli
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v6
-
-      - name: Cache cargo registry
-        uses: actions/cache@v5
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-
-      - name: Checkout Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version-file: .node-version
-
-      - name: Checkout Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
+      - name: Setup
+        uses: ./.github/actions/setup.yml
 
       - name: Install Packages (workspace)
         working-directory: ./

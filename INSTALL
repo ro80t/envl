@@ -1,5 +1,8 @@
 #!/bin/bash
 
+rustup component add clippy rustfmt
+npm i -g bun @antfu/ni
+
 cargo build
 bun ci
 
