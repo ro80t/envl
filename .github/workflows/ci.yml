@@ -13,29 +13,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Cache cargo registry
-        uses: actions/cache@v5
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-
-      - name: Checkout Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
-      - name: Install tools
-        run: |
-            rustup component add clippy rustfmt
-            npm i -g bun @antfu/ni
-
-      - name: Install npm packages
-        run: bun install --frozen-lockfile
+      - name: Setup
+        uses: ./.github/workflows/setup
 
       - name: Check build
         run: scripts/build-release.sh
@@ -74,13 +53,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Checkout Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
+      - name: Setup
+        uses: ./.github/workflows/setup
 
       - name: Install Packages
         run: bun ci
@@ -99,29 +76,11 @@ jobs:
         working-directory: ./packages/envl-cli
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Cache cargo registry
-        uses: actions/cache@v5
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-
-      - name: Checkout Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version-file: .node-version
-
-      - name: Checkout Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
+      - name: Setup
+        uses: ./.github/workflows/setup
 
       - name: Install Packages (workspace)
         working-directory: ./
@@ -135,3 +94,39 @@ jobs:
 
       - name: Check Linting
         run: npm run lint
+
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    needs: [envl, version, cli]
+
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup
+        uses: ./.github/workflows/setup
+
+      - name: Tag check
+        continue-on-error: true
+        id: tag-check
+        shell: bash
+        run: |
+          [[ '${{ github.ref }}' == refs/tags/v+([0-9])\.+([0-9])\.+([0-9])*([a-zA-Z]) ]]
+
+      - name: Publish crates.io
+        if: steps.tag-check.outcome == 'success'
+        run: cargo publish --workspace --exclude envl-rs-test
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
+
+      - name: Publish npmjs.com
+        if: steps.tag-check.outcome == 'success'
+        working-directory: ./packages/envl-cli
+        run: |
+          npm ci
+          npm build
+          npm publish --provenance --access public
