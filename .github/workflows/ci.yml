@@ -111,16 +111,20 @@ jobs:
         uses: ./.github/workflows/setup
 
       - name: Tag check
+        continue-on-error: true
+        id: tag-check
         shell: bash
         run: |
-          [[ '${{ github.ref }}' == refs/tags/v+([0-9])\.+([0-9])\.+([0-9])*([a-zA-Z]) ]] && echo 'tag is updated' || exit 0
+          [[ '${{ github.ref }}' == refs/tags/v+([0-9])\.+([0-9])\.+([0-9])*([a-zA-Z]) ]]
 
       - name: Publish crates.io
+        if: steps.tag-check.outcome == 'success'
         run: cargo publish --workspace --exclude envl-rs-test
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
 
       - name: Publish npmjs.com
+        if: steps.tag-check.outcome == 'success'
         working-directory: ./packages/envl-cli
         run: |
           npm ci
