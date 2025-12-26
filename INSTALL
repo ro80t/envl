@@ -5,6 +5,3 @@ npm i -g bun @antfu/ni
 
 cargo build
 bun ci
-
-cd packages/envl-cli
-npm ci

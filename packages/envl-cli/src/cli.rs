@@ -6,7 +6,6 @@ use envl::{
     load_envl_core,
     misc::filesystem::write_file,
 };
-use napi_derive::napi;
 
 #[derive(Parser, Debug, Clone)]
 #[clap(name = "envl", author = "ro80t")]
@@ -36,7 +35,6 @@ fn get_config_file() -> String {
     read_to_string(config_path).unwrap()
 }
 
-#[napi]
 pub fn cli() {
     let args = Args::parse();
     let current_dir = current_dir().unwrap();
