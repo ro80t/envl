@@ -44,11 +44,21 @@ jobs:
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
+      - name: Checkout Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Checkout Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
       - name: Install tools
         run: |
-            rustup component add clippy rustfmt
-            rustup toolchain install nightly
-            cargo install cross
+            ./INSTALL
+            cargo install cross --locked --force
 
       - name: Install target
         run: rustup target add ${{ matrix.target }}

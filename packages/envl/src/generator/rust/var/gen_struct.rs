@@ -41,7 +41,7 @@ pub fn gen_struct(
                 }
             }
         } else {
-            return Err(Error::other(""));
+            return Err(Error::other(format!("{} is required", &n)));
         }
     }
 
