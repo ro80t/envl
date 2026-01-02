@@ -29,7 +29,8 @@
         "format:prettier": "prettier . -w",
         "format:toml": "taplo format",
         "prepublishOnly": "bun run build",
-        "postinstall": "bun run build && node dist/postInstall.js"
+        "install": "bun run build",
+        "postinstall": "node dist/postInstall.js"
     },
     "peerDependencies": {
         "typescript": "^5"
