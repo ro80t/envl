@@ -1,5 +1,5 @@
 import pkgJson from "../../package.json";
-import { installEnvl } from "../utils/install";
+import { installEnvl } from "./install";
 import { Entry, open } from "yauzl";
 import { createWriteStream, unlinkSync, writeFileSync } from "fs";
 import { join } from "path";

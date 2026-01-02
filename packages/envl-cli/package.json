@@ -13,10 +13,10 @@
         "envl-cli"
     ],
     "files": [
-        "dist"
+        "packages/npm"
     ],
     "bin": {
-        "envl": "./dist/envl.exe"
+        "envl": "./packages/npm/envl.exe"
     },
     "publishConfig": {
         "registry": "https://registry.npmjs.org/",
@@ -29,8 +29,7 @@
         "format:prettier": "prettier . -w",
         "format:toml": "taplo format",
         "prepublishOnly": "npm run build",
-        "preinstall": "npm run build",
-        "postinstall": "node dist/postInstall.js"
+        "postinstall": "bun run packages/npm/postInstall.ts"
     },
     "peerDependencies": {
         "typescript": "^5"
