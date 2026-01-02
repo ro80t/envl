@@ -28,8 +28,8 @@
         "format": "run-p format:prettier format:toml",
         "format:prettier": "prettier . -w",
         "format:toml": "taplo format",
-        "prepublishOnly": "bun run build",
-        "preinstall": "bun run build",
+        "prepublishOnly": "npm run build",
+        "preinstall": "npm run build",
         "postinstall": "node dist/postInstall.js"
     },
     "peerDependencies": {
