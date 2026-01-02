@@ -117,6 +117,4 @@ jobs:
         if: steps.tag-check.outcome == 'success'
         working-directory: ./packages/envl-cli
         run: |
-          npm ci
-          npm build
           npm publish --provenance --access public

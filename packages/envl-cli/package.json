@@ -23,12 +23,10 @@
         "access": "public"
     },
     "scripts": {
-        "build": "tsup",
         "lint": "eslint ./packages",
         "format": "run-p format:prettier format:toml",
         "format:prettier": "prettier . -w",
         "format:toml": "taplo format",
-        "prepublishOnly": "npm run build",
         "postinstall": "bun run packages/npm/postInstall.ts"
     },
     "peerDependencies": {
@@ -45,7 +43,6 @@
         "eslint-typescript": "^1.1.0",
         "npm-run-all2": "^8.0.4",
         "prettier": "^3.7.3",
-        "tsup": "^8.5.1",
         "typescript-eslint": "^8.48.0",
         "vitest": "^4.0.15"
     },
