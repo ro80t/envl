@@ -1,7 +1,7 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-    entry: ["packages/npm/install.ts"],
+    entry: ["packages/npm/postInstall.ts"],
     dts: true,
     format: ["esm"],
     tsconfig: "tsconfig.json",

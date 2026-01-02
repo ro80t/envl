@@ -46,5 +46,9 @@
         "tsup": "^8.5.1",
         "typescript-eslint": "^8.48.0",
         "vitest": "^4.0.15"
+    },
+    "dependencies": {
+        "@types/yauzl": "^2.10.3",
+        "yauzl": "^3.2.0"
     }
 }
