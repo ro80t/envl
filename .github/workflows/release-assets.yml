@@ -58,7 +58,7 @@ jobs:
       - name: Install tools
         run: |
             ./INSTALL
-            cargo install cross
+            cargo install cross --locked --force
 
       - name: Install target
         run: rustup target add ${{ matrix.target }}
