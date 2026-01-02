@@ -21,7 +21,7 @@ rust-version = "1.74" # MSRV
 clap = { version = "4.5.52", features = ["derive"] }
 thiserror = { version = "2.0.17" }
 regex = { version = "1.11.3" }
-proc-macro2 = { version = "1.0.101" }
+proc-macro2 = { version = "1.0.104" }
 quote = { version = "1.0.42" }
 syn = { version = "2.0.110", features = ["full", "extra-traits"] }
 envl = { version = "0.11.3", path = "./packages/envl" }
