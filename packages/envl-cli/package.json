@@ -29,7 +29,7 @@
         "format:prettier": "prettier . -w",
         "format:toml": "taplo format",
         "prepublishOnly": "bun run build",
-        "install": "bun run build",
+        "preinstall": "bun run build",
         "postinstall": "node dist/postInstall.js"
     },
     "peerDependencies": {
