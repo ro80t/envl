@@ -71,10 +71,6 @@ jobs:
     name: Cli build check
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ./packages/envl-cli
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -83,16 +79,10 @@ jobs:
         uses: ./.github/workflows/setup
 
       - name: Install Packages (workspace)
-        working-directory: ./
         run: bun ci
 
-      - name: Install Packages
-        run: npm ci
-
-      - name: Build Cli
-        run: npm run build
-
       - name: Check Linting
+        working-directory: ./packages/envl-cli
         run: npm run lint
 
   publish:
