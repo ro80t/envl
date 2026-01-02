@@ -22,7 +22,7 @@
     },
     "packages/envl-cli": {
       "name": "envl-cli",
-      "version": "0.11.2",
+      "version": "0.11.3",
       "bin": {
         "envl": "./dist/envl.exe",
       },
