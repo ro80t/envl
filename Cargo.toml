@@ -15,7 +15,7 @@ version = "0.11.2"
 repository = "https://github.com/ROBOTofficial/envl"
 license = "MIT"
 edition = "2021"
-rust-version = "1.77" # MSRV
+rust-version = "1.74" # MSRV
 
 [workspace.dependencies]
 clap = { version = "4.5.52", features = ["derive"] }
