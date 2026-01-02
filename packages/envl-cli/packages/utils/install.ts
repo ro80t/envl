@@ -1,10 +1,10 @@
 const repo = "https://github.com/ro80t/envl";
 
 type Platform = {
-    os: string,
-    arch: string,
-    bin: string,
-    installFile: string
+    os: string;
+    arch: string;
+    bin: string;
+    installFile: string;
 };
 
 const supportPlatform: Platform[] = [
@@ -50,7 +50,7 @@ export async function installEnvl(version: string): Promise<ArrayBuffer> {
         }
     }
 
-    throw new Error(`${os}:${arch} is unsupported.`)
+    throw new Error(`${os}:${arch} is unsupported.`);
 }
 
 async function downloadEnvl(version: string, platform: Platform): Promise<ArrayBuffer> {
