@@ -1,4 +1,4 @@
-use proc_macro2::TokenStream;
+use proc_macro2::{Literal, TokenStream};
 use quote::ToTokens;
 
 pub struct CodeBlock {
@@ -14,6 +14,14 @@ impl ToString for CodeBlock {
 impl From<TokenStream> for CodeBlock {
     fn from(value: TokenStream) -> Self {
         Self { inner: value }
+    }
+}
+
+impl From<Literal> for CodeBlock {
+    fn from(value: Literal) -> Self {
+        Self {
+            inner: value.to_token_stream(),
+        }
     }
 }
 

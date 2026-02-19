@@ -8,12 +8,12 @@ pub mod __private;
 #[doc(hidden)]
 pub use quote;
 
-pub mod code_block;
+pub mod codeblock;
 
 #[macro_export]
 macro_rules! code_block {
     ($($tts:tt)*) => {
-        $crate::code_block::CodeBlock::from($crate::code_block_core!($($tts)*))
+        $crate::codeblock::CodeBlock::from($crate::code_block_core!($($tts)*))
     };
 }
 
