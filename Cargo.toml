@@ -23,7 +23,7 @@ thiserror = { version = "2.0.17" }
 regex = { version = "1.11.3" }
 proc-macro2 = { version = "1.0.105" }
 quote = { version = "1.0.42" }
-syn = { version = "2.0.110", features = ["full", "extra-traits"] }
+syn = { version = "2.0.114", features = ["full", "extra-traits"] }
 envl = { version = "0.11.3", path = "./packages/envl" }
 envl-variables = { version = "0.11.3", path = "./packages/envl-variables" }
 envl-config = { version = "0.11.3", path = "./packages/envl-config" }
