@@ -1,6 +1,6 @@
 use std::io::Error;
 
-use envl_codeblock::code_block;
+use envl_codeblock::{code_block, codeblock::CodeBlock};
 use proc_macro2::TokenStream;
 
 use crate::{
@@ -37,7 +37,7 @@ pub fn generate_js_file(data: VariableHashMap, options: GenerateOptions) -> Resu
     }
 }
 
-pub(crate) fn generate_js_file_core(data: &VariableHashMap) -> Result<TokenStream, Error> {
+pub(crate) fn generate_js_file_core(data: &VariableHashMap) -> Result<CodeBlock, Error> {
     let mut vars = Vec::new();
 
     for (n, v) in data {

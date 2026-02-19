@@ -1,10 +1,9 @@
-use envl_codeblock::code_block;
+use envl_codeblock::{code_block, codeblock::CodeBlock};
 use envl_utils::variable::Type;
-use proc_macro2::TokenStream;
 
 use crate::generator::ts::{gen_array::gen_array, gen_struct::gen_struct};
 
-pub(crate) fn gen_value(t: Type) -> TokenStream {
+pub(crate) fn gen_value(t: Type) -> CodeBlock {
     match &t {
         Type::Array(boxed_element_type) => gen_array(*boxed_element_type.clone()),
         Type::Bool => code_block! {boolean},

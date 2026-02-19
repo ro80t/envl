@@ -1,12 +1,12 @@
 use std::{collections::HashMap, io::Error};
 
-use envl_codeblock::code_block;
+use envl_codeblock::{code_block, codeblock::CodeBlock};
 use envl_utils::variable::Value;
 use proc_macro2::TokenStream;
 
 use crate::generator::js::value::gen_value;
 
-pub(crate) fn gen_struct(v: HashMap<String, Value>) -> Result<TokenStream, Error> {
+pub(crate) fn gen_struct(v: HashMap<String, Value>) -> Result<CodeBlock, Error> {
     let mut struct_value = Vec::new();
 
     for (name, value) in v {
