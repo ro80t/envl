@@ -20,7 +20,7 @@ rust-version = "1.74" # MSRV
 [workspace.dependencies]
 clap = { version = "4.5.54", features = ["derive"] }
 thiserror = { version = "2.0.17" }
-regex = { version = "1.11.3" }
+regex = { version = "1.12.3" }
 proc-macro2 = { version = "1.0.105" }
 quote = { version = "1.0.42" }
 syn = { version = "2.0.114", features = ["full", "extra-traits"] }
