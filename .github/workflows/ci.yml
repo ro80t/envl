@@ -109,7 +109,7 @@ jobs:
 
       - name: Publish crates.io
         if: steps.tag-check.outcome == 'success'
-        run: cargo publish --workspace --exclude envl-rs-test
+        run: cargo publish --workspace
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
 
