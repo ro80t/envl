@@ -1,6 +1,7 @@
 use proc_macro2::{Literal, TokenStream};
 use quote::ToTokens;
 
+#[derive(Clone, Debug)]
 pub struct CodeBlock {
     pub inner: TokenStream,
 }

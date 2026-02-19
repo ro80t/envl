@@ -1,6 +1,6 @@
 use std::{collections::HashMap, io::Error};
 
-use quote::quote;
+use envl_codeblock::code_block;
 
 use crate::{
     generator::rust::{types::parse_v_type, utils::struct_derive, var::parse_var},
@@ -36,7 +36,7 @@ pub fn generate_rust_file(data: VariableHashMap) -> Result<String, Error> {
         .iter()
         .map(|(n, v)| {
             let name = n.parse::<proc_macro2::TokenStream>().unwrap();
-            quote! { #name: #v }
+            code_block! { #name: #v }
         })
         .collect::<Vec<_>>();
     let env_value = value_hm
@@ -44,11 +44,11 @@ pub fn generate_rust_file(data: VariableHashMap) -> Result<String, Error> {
         .map(|(n, v)| {
             let name = n.parse::<proc_macro2::TokenStream>().unwrap();
             let value = v.parse::<proc_macro2::TokenStream>().unwrap();
-            quote! { #name: #value }
+            code_block! { #name: #value }
         })
         .collect::<Vec<_>>();
 
-    Ok(quote! {
+    Ok(code_block! {
         #[deny(clippy::all)]
 
         #(#structs)*

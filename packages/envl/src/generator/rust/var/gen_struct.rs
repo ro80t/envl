@@ -1,9 +1,11 @@
 use std::{collections::HashMap, io::Error};
 
+use envl_codeblock::code_block;
+use envl_codeblock::codeblock::CodeBlock;
 use envl_utils::case::{CamelCase, Case, SnakeCase};
 use envl_utils::variable::{Type, Value};
 use proc_macro2::TokenStream;
-use quote::quote;
+use quote::ToTokens;
 
 use crate::generator::rust::var::gen_value;
 
@@ -12,7 +14,7 @@ pub fn gen_struct(
     t: HashMap<String, Type>,
     v: HashMap<String, Value>,
     structs: &mut Vec<TokenStream>,
-) -> Result<TokenStream, Error> {
+) -> Result<CodeBlock, Error> {
     let struct_type = format!("Struct{}", name).parse::<TokenStream>().unwrap();
     let struct_name = SnakeCase::gen(CamelCase::parse(format!("struct{}", name).as_str()))
         .parse::<TokenStream>()
@@ -49,19 +51,22 @@ pub fn gen_struct(
         .iter()
         .map(|(n, v)| {
             let name = n.parse::<TokenStream>().unwrap();
-            quote! {#name: #v}
+            code_block! {#name: #v}
         })
         .collect::<Vec<_>>();
 
-    structs.push(quote! {
-        let #struct_name = #struct_type {
-            #(
-                #elements,
-            )*
-        };
-    });
+    structs.push(
+        code_block! {
+            let #struct_name = #struct_type {
+                #(
+                    #elements,
+                )*
+            };
+        }
+        .to_token_stream(),
+    );
 
-    Ok(quote! {
+    Ok(code_block! {
         #struct_name
     })
 }

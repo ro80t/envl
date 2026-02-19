@@ -1,8 +1,8 @@
 use std::io::Error;
 
+use envl_codeblock::{code_block, codeblock::CodeBlock};
 use envl_utils::variable::{Type, Value};
 use proc_macro2::TokenStream;
-use quote::quote;
 
 use crate::generator::rust::var::gen_value;
 
@@ -11,7 +11,7 @@ pub fn gen_array(
     t: Type,
     v: Vec<Value>,
     structs: &mut Vec<TokenStream>,
-) -> Result<TokenStream, Error> {
+) -> Result<CodeBlock, Error> {
     let mut vec_values = Vec::new();
 
     for value in v {
@@ -25,7 +25,7 @@ pub fn gen_array(
         }
     }
 
-    Ok(quote! {
+    Ok(code_block! {
         Vec::from([
             #(
                 #vec_values,
