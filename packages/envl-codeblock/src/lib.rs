@@ -8,8 +8,18 @@ pub mod __private;
 #[doc(hidden)]
 pub use quote;
 
+pub mod code_block;
+
 #[macro_export]
 macro_rules! code_block {
+    ($($tts:tt)*) => {
+        $crate::code_block::CodeBlock::from($crate::code_block_core!($($tts)*))
+    };
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! code_block_core {
     () => {
         $crate::__private::TokenStream::new()
     };
@@ -25,6 +35,7 @@ macro_rules! code_block {
         $crate::quote::ToTokens::to_tokens(&$var, &mut _s);
         _s
     }};
+
     ($tt1:tt $tt2:tt) => {{
         let mut _s = $crate::__private::TokenStream::new();
         $crate::push_token!{$tt1 _s}
@@ -197,7 +208,7 @@ macro_rules! push_token {
         $crate::__private::push_group(
             &mut $tokens,
             $crate::__private::Delimiter::Parenthesis,
-            $crate::code_block!($($inner)*),
+            $crate::code_block_core!($($inner)*),
         );
     };
 
@@ -205,7 +216,7 @@ macro_rules! push_token {
         $crate::__private::push_group(
             &mut $tokens,
             $crate::__private::Delimiter::Bracket,
-            $crate::code_block!($($inner)*),
+            $crate::code_block_core!($($inner)*),
         );
     };
 
@@ -213,7 +224,7 @@ macro_rules! push_token {
         $crate::__private::push_group(
             &mut $tokens,
             $crate::__private::Delimiter::Brace,
-            $crate::code_block!($($inner)*),
+            $crate::code_block_core!($($inner)*),
         );
     };
 
