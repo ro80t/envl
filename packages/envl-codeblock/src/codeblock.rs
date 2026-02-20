@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use proc_macro2::{Literal, TokenStream};
 use quote::ToTokens;
 
@@ -6,8 +8,8 @@ pub struct CodeBlock {
     pub inner: TokenStream,
 }
 
-impl ToString for CodeBlock {
-    fn to_string(&self) -> String {
+impl CodeBlock {
+    pub fn to_plain_string(&self) -> String {
         self.inner.to_string()
     }
 }
@@ -23,6 +25,12 @@ impl From<Literal> for CodeBlock {
         Self {
             inner: value.to_token_stream(),
         }
+    }
+}
+
+impl Display for CodeBlock {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(&self.to_plain_string())
     }
 }
 
