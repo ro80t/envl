@@ -8,28 +8,11 @@ pub struct CodeBlock {
     pub inner: TokenStream,
 }
 
+#[derive(Clone, Debug, Default, PartialEq)]
+pub struct CustomConfig {}
+
 impl CodeBlock {
-    pub fn to_plain_string(&self) -> String {
-        self.inner.to_string()
-    }
-}
-
-impl From<TokenStream> for CodeBlock {
-    fn from(value: TokenStream) -> Self {
-        Self { inner: value }
-    }
-}
-
-impl From<Literal> for CodeBlock {
-    fn from(value: Literal) -> Self {
-        Self {
-            inner: value.to_token_stream(),
-        }
-    }
-}
-
-impl Display for CodeBlock {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    pub fn to_string_with_custom_config(&self, _config: CustomConfig) -> String {
         let mut txt = String::new();
 
         for token in self.inner.to_token_stream() {
@@ -53,7 +36,28 @@ impl Display for CodeBlock {
             }
         }
 
-        f.write_str(&txt.trim())
+        txt
+    }
+}
+
+impl From<TokenStream> for CodeBlock {
+    fn from(value: TokenStream) -> Self {
+        Self { inner: value }
+    }
+}
+
+impl From<Literal> for CodeBlock {
+    fn from(value: Literal) -> Self {
+        Self {
+            inner: value.to_token_stream(),
+        }
+    }
+}
+
+impl Display for CodeBlock {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let txt = self.to_string_with_custom_config(CustomConfig::default());
+        f.write_str(txt.trim())
     }
 }
 
