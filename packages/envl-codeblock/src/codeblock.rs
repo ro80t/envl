@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use proc_macro2::{Literal, TokenStream};
+use proc_macro2::{Literal, Spacing, TokenStream, TokenTree};
 use quote::ToTokens;
 
 #[derive(Clone, Debug)]
@@ -30,7 +30,30 @@ impl From<Literal> for CodeBlock {
 
 impl Display for CodeBlock {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(&self.to_plain_string())
+        let mut txt = String::new();
+
+        for token in self.inner.to_token_stream() {
+            match token {
+                TokenTree::Group(group) => {
+                    txt.extend([group.to_string().as_str(), " "]);
+                }
+                TokenTree::Ident(ident) => {
+                    txt.extend([ident.to_string().as_str(), " "]);
+                }
+                TokenTree::Literal(literal) => {
+                    txt.extend([literal.to_string().as_str(), " "]);
+                }
+                TokenTree::Punct(punct) => {
+                    let is_joint = match punct.spacing() {
+                        Spacing::Alone => false,
+                        Spacing::Joint => true,
+                    };
+                    txt.extend([punct.to_string().as_str(), if is_joint { "" } else { " " }]);
+                }
+            }
+        }
+
+        f.write_str(&txt.trim())
     }
 }
 
