@@ -1,6 +1,7 @@
 #[cfg(test)]
 mod test {
-    use envl_codeblock::code_block;
+    use envl_codeblock::{code_block, codeblock::CustomConfig};
+    use proc_macro2::Delimiter;
 
     #[test]
     fn normal_codeblock_test() {
@@ -54,5 +55,24 @@ mod test {
         };
 
         assert_eq!(code.to_string(), "struct Foo { hoge : 123 , huga : 456 }");
+    }
+
+    #[test]
+    fn custom_config_test() {
+        let code = code_block! {
+            export function hello() {
+                console.log("Hello World!!");
+                console.log("This is a test");
+            }
+        };
+
+        assert_eq!(
+            code.to_string_with_custom_config(CustomConfig {
+                line_break_brackets: vec![Delimiter::Brace]
+            }),
+            "export function hello () {
+\tconsole . log (\"Hello World!!\") ; console . log (\"This is a test\") ;
+}"
+        );
     }
 }
