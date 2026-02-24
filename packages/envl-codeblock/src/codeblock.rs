@@ -15,6 +15,7 @@ pub struct BreakLineConfig {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct CustomConfig {
+    pub joint_chars: bool,
     pub remove_space_before_parenthesis: bool,
     pub break_line: BreakLineConfig,
 }
@@ -22,6 +23,7 @@ pub struct CustomConfig {
 impl CustomConfig {
     pub fn plain() -> Self {
         Self {
+            joint_chars: true,
             remove_space_before_parenthesis: false,
             break_line: BreakLineConfig {
                 brackets: Vec::new(),
@@ -33,6 +35,7 @@ impl CustomConfig {
 impl Default for CustomConfig {
     fn default() -> Self {
         Self {
+            joint_chars: true,
             remove_space_before_parenthesis: true,
             break_line: BreakLineConfig {
                 brackets: vec![Delimiter::Brace],
@@ -149,7 +152,11 @@ impl CodeBlock {
                     txt.extend([
                         self.reflect_indent(punct.to_string(), indent, is_first)
                             .as_str(),
-                        if is_joint { "" } else { space.as_str() },
+                        if config.joint_chars && is_joint {
+                            ""
+                        } else {
+                            space.as_str()
+                        },
                     ]);
                 }
             }
