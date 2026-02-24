@@ -9,8 +9,36 @@ pub struct CodeBlock {
 }
 
 #[derive(Clone, Debug, Default, PartialEq)]
+pub struct BreakLineConfig {
+    pub brackets: Vec<Delimiter>,
+}
+
+#[derive(Clone, Debug, PartialEq)]
 pub struct CustomConfig {
-    pub line_break_brackets: Vec<Delimiter>,
+    pub remove_space_before_parenthesis: bool,
+    pub break_line: BreakLineConfig,
+}
+
+impl CustomConfig {
+    pub fn plain() -> Self {
+        Self {
+            remove_space_before_parenthesis: false,
+            break_line: BreakLineConfig {
+                brackets: Vec::new(),
+            },
+        }
+    }
+}
+
+impl Default for CustomConfig {
+    fn default() -> Self {
+        Self {
+            remove_space_before_parenthesis: true,
+            break_line: BreakLineConfig {
+                brackets: vec![Delimiter::Brace],
+            },
+        }
+    }
 }
 
 impl CodeBlock {
@@ -37,20 +65,40 @@ impl CodeBlock {
         }
     }
 
+    fn get_space_after_token(
+        &self,
+        config: CustomConfig,
+        index: usize,
+        tokens: Vec<TokenTree>,
+    ) -> String {
+        let next_index = index + 1;
+        if config.remove_space_before_parenthesis {
+            if let Some(TokenTree::Group(group)) = tokens.get(next_index) {
+                if group.delimiter() == Delimiter::Parenthesis {
+                    return String::new();
+                }
+            }
+        }
+        " ".to_string()
+    }
+
     fn token_stream_to_string(
         &self,
         config: CustomConfig,
         token_stream: TokenStream,
         indent: &mut u64,
     ) -> String {
+        let tokens = token_stream.into_iter().collect::<Vec<_>>();
         let mut txt = String::new();
         let mut is_first = true;
 
-        for token in token_stream {
+        for (i, token) in tokens.iter().enumerate() {
+            let space = self.get_space_after_token(config.clone(), i, tokens.clone());
+
             match token {
                 TokenTree::Group(group) => {
                     let delimiter = group.delimiter();
-                    if config.line_break_brackets.contains(&delimiter) {
+                    if config.break_line.brackets.contains(&delimiter) {
                         let delimiter_txt = self.delimiter_to_string(delimiter);
                         txt.extend([
                             self.reflect_indent(delimiter_txt.0, indent, is_first)
@@ -75,7 +123,7 @@ impl CodeBlock {
                         txt.extend([
                             self.reflect_indent(group.to_string(), indent, is_first)
                                 .as_str(),
-                            " ",
+                            space.as_str(),
                         ]);
                     }
                 }
@@ -83,14 +131,14 @@ impl CodeBlock {
                     txt.extend([
                         self.reflect_indent(ident.to_string(), indent, is_first)
                             .as_str(),
-                        " ",
+                        space.as_str(),
                     ]);
                 }
                 TokenTree::Literal(literal) => {
                     txt.extend([
                         self.reflect_indent(literal.to_string(), indent, is_first)
                             .as_str(),
-                        " ",
+                        space.as_str(),
                     ]);
                 }
                 TokenTree::Punct(punct) => {
@@ -101,7 +149,7 @@ impl CodeBlock {
                     txt.extend([
                         self.reflect_indent(punct.to_string(), indent, is_first)
                             .as_str(),
-                        if is_joint { "" } else { " " },
+                        if is_joint { "" } else { space.as_str() },
                     ]);
                 }
             }
@@ -134,7 +182,7 @@ impl From<Literal> for CodeBlock {
 
 impl Display for CodeBlock {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let txt = self.to_string_with_custom_config(CustomConfig::default());
+        let txt = self.to_string_with_custom_config(CustomConfig::plain());
         f.write_str(txt.trim())
     }
 }

@@ -1,7 +1,6 @@
 #[cfg(test)]
 mod test {
     use envl_codeblock::{code_block, codeblock::CustomConfig};
-    use proc_macro2::Delimiter;
 
     #[test]
     fn normal_codeblock_test() {
@@ -67,11 +66,9 @@ mod test {
         };
 
         assert_eq!(
-            code.to_string_with_custom_config(CustomConfig {
-                line_break_brackets: vec![Delimiter::Brace]
-            }),
-            "export function hello () {
-\tconsole . log (\"Hello World!!\") ; console . log (\"This is a test\") ;
+            code.to_string_with_custom_config(CustomConfig::default()),
+            "export function hello() {
+\tconsole . log(\"Hello World!!\") ; console . log(\"This is a test\") ;
 }"
         );
     }
