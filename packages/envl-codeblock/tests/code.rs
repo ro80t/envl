@@ -68,7 +68,8 @@ mod test {
         assert_eq!(
             code.to_string_with_custom_config(CustomConfig::default()),
             "export function hello() {
-\tconsole . log(\"Hello World!!\") ; console . log(\"This is a test\") ;
+\tconsole.log(\"Hello World!!\");
+\tconsole.log(\"This is a test\");
 }"
         );
     }

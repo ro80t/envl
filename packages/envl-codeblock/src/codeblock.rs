@@ -10,13 +10,22 @@ pub struct CodeBlock {
 
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct BreakLineConfig {
+    pub chars: Vec<char>,
     pub brackets: Vec<Delimiter>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+pub struct SpaceConfig {
+    pub no_after_space_chars: Vec<char>,
+    pub no_before_space_chars: Vec<char>,
+    pub no_space_chars: Vec<char>,
 }
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct CustomConfig {
     pub joint_chars: bool,
     pub remove_space_before_parenthesis: bool,
+    pub space: SpaceConfig,
     pub break_line: BreakLineConfig,
 }
 
@@ -25,7 +34,13 @@ impl CustomConfig {
         Self {
             joint_chars: true,
             remove_space_before_parenthesis: false,
+            space: SpaceConfig {
+                no_after_space_chars: Vec::new(),
+                no_before_space_chars: Vec::new(),
+                no_space_chars: Vec::new(),
+            },
             break_line: BreakLineConfig {
+                chars: Vec::new(),
                 brackets: Vec::new(),
             },
         }
@@ -37,7 +52,13 @@ impl Default for CustomConfig {
         Self {
             joint_chars: true,
             remove_space_before_parenthesis: true,
+            space: SpaceConfig {
+                no_after_space_chars: vec![':'],
+                no_before_space_chars: Vec::new(),
+                no_space_chars: vec![',', ';', '.'],
+            },
             break_line: BreakLineConfig {
+                chars: vec![';'],
                 brackets: vec![Delimiter::Brace],
             },
         }
@@ -68,6 +89,33 @@ impl CodeBlock {
         }
     }
 
+    fn token_to_char(&self, index: usize, tokens: Vec<TokenTree>) -> Option<char> {
+        if let Some(token) = tokens.get(index) {
+            match token {
+                TokenTree::Group(_group) => None,
+                TokenTree::Ident(ident) => {
+                    let txt = ident.to_string();
+                    match txt.chars().collect::<Vec<_>>().first() {
+                        Some(ch) if txt.len() == 1 => Some(*ch),
+                        None => None,
+                        _ => None,
+                    }
+                }
+                TokenTree::Literal(literal) => {
+                    let txt = literal.to_string();
+                    match txt.chars().collect::<Vec<_>>().first() {
+                        Some(ch) if txt.len() == 1 => Some(*ch),
+                        None => None,
+                        _ => None,
+                    }
+                }
+                TokenTree::Punct(punct) => Some(punct.as_char()),
+            }
+        } else {
+            None
+        }
+    }
+
     fn get_space_after_token(
         &self,
         config: CustomConfig,
@@ -75,6 +123,29 @@ impl CodeBlock {
         tokens: Vec<TokenTree>,
     ) -> String {
         let next_index = index + 1;
+
+        let curr_char = self.token_to_char(index, tokens.clone());
+        let next_char = self.token_to_char(next_index, tokens.clone());
+
+        if let Some(ch) = curr_char {
+            if config.break_line.chars.contains(&ch) {
+                return String::from("\n");
+            }
+            if config.space.no_after_space_chars.contains(&ch)
+                || config.space.no_space_chars.contains(&ch)
+            {
+                return String::new();
+            }
+        }
+
+        if let Some(ch) = next_char {
+            if config.space.no_before_space_chars.contains(&ch)
+                || config.space.no_space_chars.contains(&ch)
+            {
+                return String::new();
+            }
+        }
+
         if config.remove_space_before_parenthesis {
             if let Some(TokenTree::Group(group)) = tokens.get(next_index) {
                 if group.delimiter() == Delimiter::Parenthesis {
@@ -160,7 +231,7 @@ impl CodeBlock {
                     ]);
                 }
             }
-            is_first = false;
+            is_first = space == "\n";
         }
 
         txt
