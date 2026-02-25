@@ -17,6 +17,7 @@ pub struct BreakLineConfig {
 
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct SpaceConfig {
+    pub joint_chars: bool,
     pub no_after_space_chars: Vec<char>,
     pub no_before_space_chars: Vec<char>,
     pub no_space_chars: Vec<char>,
@@ -25,7 +26,6 @@ pub struct SpaceConfig {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct CustomConfig {
-    pub joint_chars: bool,
     pub space: SpaceConfig,
     pub break_line: BreakLineConfig,
 }
@@ -33,8 +33,8 @@ pub struct CustomConfig {
 impl CustomConfig {
     pub fn plain() -> Self {
         Self {
-            joint_chars: true,
             space: SpaceConfig {
+                joint_chars: true,
                 no_after_space_chars: Vec::new(),
                 no_before_space_chars: Vec::new(),
                 no_space_chars: Vec::new(),
@@ -51,8 +51,8 @@ impl CustomConfig {
 impl Default for CustomConfig {
     fn default() -> Self {
         Self {
-            joint_chars: true,
             space: SpaceConfig {
+                joint_chars: true,
                 no_after_space_chars: vec![':'],
                 no_before_space_chars: Vec::new(),
                 no_space_chars: vec![',', ';', '.'],
@@ -224,7 +224,7 @@ impl CodeBlock {
                     txt.extend([
                         self.reflect_indent(punct.to_string(), indent, is_first)
                             .as_str(),
-                        if config.joint_chars && is_joint {
+                        if config.space.joint_chars && is_joint {
                             ""
                         } else {
                             space.as_str()
