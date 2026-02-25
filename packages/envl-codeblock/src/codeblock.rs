@@ -19,12 +19,12 @@ pub struct SpaceConfig {
     pub no_after_space_chars: Vec<char>,
     pub no_before_space_chars: Vec<char>,
     pub no_space_chars: Vec<char>,
+    pub brakets: Vec<Delimiter>,
 }
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct CustomConfig {
     pub joint_chars: bool,
-    pub remove_space_before_parenthesis: bool,
     pub space: SpaceConfig,
     pub break_line: BreakLineConfig,
 }
@@ -33,11 +33,11 @@ impl CustomConfig {
     pub fn plain() -> Self {
         Self {
             joint_chars: true,
-            remove_space_before_parenthesis: false,
             space: SpaceConfig {
                 no_after_space_chars: Vec::new(),
                 no_before_space_chars: Vec::new(),
                 no_space_chars: Vec::new(),
+                brakets: Vec::new(),
             },
             break_line: BreakLineConfig {
                 chars: Vec::new(),
@@ -51,11 +51,11 @@ impl Default for CustomConfig {
     fn default() -> Self {
         Self {
             joint_chars: true,
-            remove_space_before_parenthesis: true,
             space: SpaceConfig {
                 no_after_space_chars: vec![':'],
                 no_before_space_chars: Vec::new(),
                 no_space_chars: vec![',', ';', '.'],
+                brakets: vec![Delimiter::Parenthesis],
             },
             break_line: BreakLineConfig {
                 chars: vec![';'],
@@ -146,9 +146,9 @@ impl CodeBlock {
             }
         }
 
-        if config.remove_space_before_parenthesis {
+        if !config.space.brakets.is_empty() {
             if let Some(TokenTree::Group(group)) = tokens.get(next_index) {
-                if group.delimiter() == Delimiter::Parenthesis {
+                if config.space.brakets.contains(&group.delimiter()) {
                     return String::new();
                 }
             }
