@@ -1,7 +1,8 @@
 use std::fmt::Display;
 
-use proc_macro2::{Delimiter, Literal, Spacing, TokenStream, TokenTree};
+use proc_macro2::{Delimiter, Group, Literal, Punct, Spacing, TokenStream, TokenTree};
 use quote::ToTokens;
+use syn::Ident;
 
 #[derive(Clone, Debug)]
 pub struct CodeBlock {
@@ -252,6 +253,30 @@ impl From<TokenStream> for CodeBlock {
 
 impl From<Literal> for CodeBlock {
     fn from(value: Literal) -> Self {
+        Self {
+            inner: value.to_token_stream(),
+        }
+    }
+}
+
+impl From<Group> for CodeBlock {
+    fn from(value: Group) -> Self {
+        Self {
+            inner: value.to_token_stream(),
+        }
+    }
+}
+
+impl From<Ident> for CodeBlock {
+    fn from(value: Ident) -> Self {
+        Self {
+            inner: value.to_token_stream(),
+        }
+    }
+}
+
+impl From<Punct> for CodeBlock {
+    fn from(value: Punct) -> Self {
         Self {
             inner: value.to_token_stream(),
         }
