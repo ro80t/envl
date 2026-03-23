@@ -15,7 +15,7 @@
 ## Examples
 
 **.envl**
-```rs
+```
 a = "123";
 b = 123;
 c = true;
@@ -41,7 +41,7 @@ h = 123;
 ```
 
 **.envlconf**
-```rs
+```
 settings {}
 
 vars {
