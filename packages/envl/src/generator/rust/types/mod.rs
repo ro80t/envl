@@ -1,26 +1,27 @@
+use envl_codeblock::{code_block, codeblock::CodeBlock};
 use envl_utils::variable::Type;
 use proc_macro2::TokenStream;
-use quote::quote;
+use quote::ToTokens;
 
 use crate::generator::rust::utils::struct_derive;
 
-pub fn parse_v_type(v_name: String, v_type: Type, structs: &mut Vec<TokenStream>) -> TokenStream {
+pub fn parse_v_type(v_name: String, v_type: Type, structs: &mut Vec<TokenStream>) -> CodeBlock {
     match v_type {
         Type::Array(boxed_element_type) => {
             let value = parse_v_type(format!("Array{}", v_name), *boxed_element_type, structs);
-            quote! {
+            code_block! {
                 Vec<#value>
             }
         }
-        Type::Bool => quote! {bool},
-        Type::Char => quote! {char},
-        Type::Float => quote! {f64},
-        Type::Int => quote! {i64},
-        Type::Null => quote! {None},
-        Type::String => quote! {String},
+        Type::Bool => code_block! {bool},
+        Type::Char => code_block! {char},
+        Type::Float => code_block! {f64},
+        Type::Int => code_block! {i64},
+        Type::Null => code_block! {None},
+        Type::String => code_block! {String},
         Type::Option(t) => {
             let value = parse_v_type(v_name, *t, structs);
-            quote! {
+            code_block! {
                 Option<#value>
             }
         }
@@ -38,24 +39,27 @@ pub fn parse_v_type(v_name: String, v_type: Type, structs: &mut Vec<TokenStream>
                     };
                     let token_stream_name = n.parse::<TokenStream>().unwrap();
                     let v_type = parse_v_type(name.to_owned(), v.to_owned(), structs);
-                    quote! {#token_stream_name: #v_type}
+                    code_block! {#token_stream_name: #v_type}
                 })
                 .collect::<Vec<_>>();
 
-            structs.push(quote! {
-                #s_derive
-                #[rustfmt::skip]
-                pub struct #struct_name {
-                    #(
-                        pub #struct_value,
-                    )*
+            structs.push(
+                code_block! {
+                    #s_derive
+                    #[rustfmt::skip]
+                    pub struct #struct_name {
+                        #(
+                            pub #struct_value,
+                        )*
+                    }
                 }
-            });
+                .to_token_stream(),
+            );
 
-            quote! {
+            code_block! {
                 #struct_name
             }
         }
-        Type::Uint => quote! {u64},
+        Type::Uint => code_block! {u64},
     }
 }

@@ -22,7 +22,5 @@
                 "vadimcn.vscode-lldb"
             ]
         }
-    },
-    "overrideCommand": false,
-    "privileged": true
+    }
 }

@@ -1,12 +1,11 @@
 use std::io::Error;
 
-use envl_codeblock::code_block;
+use envl_codeblock::{code_block, codeblock::CodeBlock};
 use envl_utils::variable::Value;
-use proc_macro2::TokenStream;
 
 use crate::generator::js::value::gen_value;
 
-pub(crate) fn gen_array(v: Vec<Value>) -> Result<TokenStream, Error> {
+pub(crate) fn gen_array(v: Vec<Value>) -> Result<CodeBlock, Error> {
     let mut vec_values = Vec::new();
 
     for value in v {

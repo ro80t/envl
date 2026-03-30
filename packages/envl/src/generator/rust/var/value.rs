@@ -1,8 +1,8 @@
 use std::io::Error;
 
+use envl_codeblock::{code_block, codeblock::CodeBlock};
 use envl_utils::variable::{Type, Value};
 use proc_macro2::{Literal, TokenStream};
-use quote::{quote, ToTokens};
 
 use crate::generator::rust::var::{array::gen_array, gen_struct::gen_struct};
 
@@ -11,15 +11,15 @@ pub fn gen_value(
     t: Type,
     v: Value,
     structs: &mut Vec<TokenStream>,
-) -> Result<TokenStream, Error> {
+) -> Result<CodeBlock, Error> {
     let result = match &v {
-        Value::Null => Ok(quote! {None}),
-        Value::String(s) => Ok(quote! {String::from(#s)}),
-        Value::Char(c) => Ok(quote! {#c}),
-        Value::Float(f) => Ok(Literal::f64_unsuffixed(*f).to_token_stream()),
-        Value::Int(i) => Ok(Literal::i64_unsuffixed(*i).to_token_stream()),
-        Value::Uint(u) => Ok(Literal::u64_unsuffixed(*u).to_token_stream()),
-        Value::Bool(b) => Ok(quote! {#b}),
+        Value::Null => Ok(code_block! {None}),
+        Value::String(s) => Ok(code_block! {String::from(#s)}),
+        Value::Char(c) => Ok(code_block! {#c}),
+        Value::Float(f) => Ok(CodeBlock::from(Literal::f64_unsuffixed(*f))),
+        Value::Int(i) => Ok(CodeBlock::from(Literal::i64_unsuffixed(*i))),
+        Value::Uint(u) => Ok(CodeBlock::from(Literal::u64_unsuffixed(*u))),
+        Value::Bool(b) => Ok(code_block! {#b}),
         Value::Array(a) => match &t {
             Type::Array(boxed_type) => {
                 match gen_array(
@@ -47,7 +47,7 @@ pub fn gen_value(
 
     match result {
         Ok(token) => match t.clone() {
-            Type::Option(_) if v != Value::Null => Ok(quote! {
+            Type::Option(_) if v != Value::Null => Ok(code_block! {
                 Some(#token)
             }),
             _ => Ok(token.to_owned()),

@@ -1,7 +1,6 @@
 use std::{collections::HashMap, io::Error};
 
-use envl_codeblock::code_block;
-use proc_macro2::TokenStream;
+use envl_codeblock::{code_block, codeblock::CodeBlock};
 
 use crate::{
     generator::{js::generate_js_file_core, ts::gen_struct::gen_struct, GenerateOptions},
@@ -43,7 +42,7 @@ pub fn generate_ts_file(data: VariableHashMap, options: GenerateOptions) -> Resu
     }
 }
 
-pub(crate) fn generate_ts_type_file(data: &VariableHashMap) -> TokenStream {
+pub(crate) fn generate_ts_type_file(data: &VariableHashMap) -> CodeBlock {
     let hm = data
         .iter()
         .map(|(n, v)| (n.clone(), v.v_type.clone()))
