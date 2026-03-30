@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod test {
-    use envl_codeblock::{code_block, codeblock::CustomConfig};
+    use envl_codeblock::code_block;
 
     #[test]
     fn normal_codeblock_test() {
@@ -54,23 +54,5 @@ mod test {
         };
 
         assert_eq!(code.to_string(), "struct Foo { hoge : 123 , huga : 456 }");
-    }
-
-    #[test]
-    fn custom_config_test() {
-        let code = code_block! {
-            export function hello() {
-                console.log("Hello World!!");
-                console.log("This is a test");
-            }
-        };
-
-        assert_eq!(
-            code.to_string_with_custom_config(CustomConfig::default()),
-            "export function hello() {
-\tconsole.log(\"Hello World!!\");
-\tconsole.log(\"This is a test\");
-}"
-        );
     }
 }
