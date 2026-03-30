@@ -45,7 +45,7 @@ jobs:
 
       - name: CI for Publish
         id: ci
-        if: needs.version.outputs.is-new-version != '0'
+        if: needs.version.outputs.is-new-version != 0
         run: cargo publish --workspace --dry-run
 
       - name: Publish
@@ -69,7 +69,7 @@ jobs:
 
       - name: CI for Publish
         id: ci
-        if: needs.version.outputs.is-new-version != '0'
+        if: needs.version.outputs.is-new-version != 0
         run: npm publish --provenance --access public -w envl-cli --dry-run
 
       - name: Publish
