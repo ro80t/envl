@@ -24,7 +24,7 @@ regex = { version = "1.12.3" }
 prettyplease = { version = "0.2.37" }
 proc-macro2 = { version = "1.0.106" }
 quote = { version = "1.0.44" }
-syn = { version = "2.0.114", features = ["full", "extra-traits"] }
+syn = { version = "2.0.117", features = ["full", "extra-traits"] }
 envl = { version = "0.11.4", path = "./packages/envl" }
 envl-variables = { version = "0.11.4", path = "./packages/envl-variables" }
 envl-config = { version = "0.11.4", path = "./packages/envl-config" }
