@@ -25,13 +25,10 @@ jobs:
       - name: Tag check
         continue-on-error: true
         shell: bash
+        id: version-check
         run: |
           [[ '${{ github.ref }}' == refs/tags/v+([0-9])\.+([0-9])\.+([0-9])*([a-zA-Z]) ]]
-
-      - name: Check for a new version
-        shell: bash
-        id: version-check
-        run: echo "is-new-version=$?" >> "$GITHUB_OUTPUT"
+          echo "is-new-version=$?" >> "$GITHUB_OUTPUT"
 
   crates-io:
     name: crates.io
