@@ -25,10 +25,13 @@ jobs:
       - name: Tag check
         continue-on-error: true
         shell: bash
-        id: version-check
+        id: tag-check
         run: |
           [[ '${{ github.ref }}' == refs/tags/v+([0-9])\.+([0-9])\.+([0-9])*([a-zA-Z]) ]]
-          echo "is-new-version=$?" >> "$GITHUB_OUTPUT"
+
+      - name: Export result
+        id: version-check
+        run: echo "is-new-version=${{ steps.tag-check.outcome == 'success' && 'yes' || 'no' }}" >> "$GITHUB_OUTPUT"
 
   crates-io:
     name: crates.io
@@ -45,7 +48,7 @@ jobs:
 
       - name: CI for Publish
         id: ci
-        if: needs.version.outputs.is-new-version != 0
+        if: needs.version.outputs.is-new-version != 'yes'
         run: cargo publish --workspace --dry-run
 
       - name: Publish
@@ -69,7 +72,7 @@ jobs:
 
       - name: CI for Publish
         id: ci
-        if: needs.version.outputs.is-new-version != 0
+        if: needs.version.outputs.is-new-version != 'yes'
         run: npm publish --provenance --access public -w envl-cli --dry-run
 
       - name: Publish
