@@ -4,9 +4,7 @@ use proc_macro2::{Group, Literal, Punct, TokenStream};
 use quote::ToTokens;
 use syn::Ident;
 
-pub trait Formatter: Sized {
-    fn fmt(code_block: CodeBlock) -> String;
-}
+use crate::fmt::{formatter, Language};
 
 #[derive(Clone, Debug)]
 pub struct CodeBlock {
@@ -14,8 +12,8 @@ pub struct CodeBlock {
 }
 
 impl CodeBlock {
-    pub fn to_string_with_formatter<T: Formatter>(&self) -> String {
-        T::fmt(self.clone())
+    pub fn to_string_with_formatter(&self, lang: Language) -> String {
+        formatter(lang, self.clone())
     }
 }
 

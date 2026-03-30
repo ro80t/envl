@@ -9,6 +9,7 @@ pub mod __private;
 pub use quote;
 
 pub mod codeblock;
+pub mod fmt;
 
 #[macro_export]
 macro_rules! code_block {
