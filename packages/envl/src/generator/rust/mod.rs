@@ -1,6 +1,6 @@
 use std::{collections::HashMap, io::Error};
 
-use envl_codeblock::code_block;
+use envl_codeblock::{code_block, fmt::Language};
 
 use crate::{
     generator::rust::{types::parse_v_type, utils::struct_derive, var::parse_var},
@@ -72,5 +72,5 @@ pub fn generate_rust_file(data: VariableHashMap) -> Result<String, Error> {
             }
         }
     }
-    .to_string())
+    .to_string_with_formatter(Language::Rust))
 }
