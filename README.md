@@ -4,13 +4,14 @@
 
 |language|lib                                  |repository                            |
 |--------|-------------------------------------|--------------------------------------|
-|Rust    |[envl](https://crates.io/crates/envl)|[ROBOTofficial/envl](./packages/envl/)|
+|Rust    |[envl](https://crates.io/crates/envl)|[ro80t/envl](./packages/envl/)|
 
 ## Cli
 
-|name    |repository                                |
-|--------|------------------------------------------|
-|envl-cli|[ROBOTofficial/envl](./packages/envl-cli/)|
+|name    |pm                                              |repository                                |
+|--------|------------------------------------------------|------------------------------------------|
+|envl-cli|[crates.io](https://crates.io/crates/envl-cli)  |[ro80t/envl](./packages/envl-cli/)|
+|envl-cli|[npmjs.com](https://npmjs.com/packages/envl-cli)|[ro80t/envl](./packages/envl-cli/)|
 
 ## Examples
 
