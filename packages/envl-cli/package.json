@@ -41,7 +41,7 @@
         "eslint": "^9.39.1",
         "eslint-config-prettier": "^10.1.8",
         "eslint-typescript": "^1.1.0",
-        "npm-run-all2": "^8.0.4",
+        "npm-run-all2": "^9.0.1",
         "prettier": "^3.7.3",
         "typescript-eslint": "^8.48.0",
         "vitest": "^4.0.15"
