@@ -47,7 +47,7 @@
         "vitest": "^4.0.15"
     },
     "dependencies": {
-        "@types/yauzl": "^2.10.3",
+        "@types/yauzl": "^3.3.0",
         "yauzl": "^3.2.0"
     }
 }
