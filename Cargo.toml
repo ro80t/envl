@@ -21,7 +21,7 @@ rust-version = "1.74" # MSRV
 clap = { version = "4.5.60", features = ["derive"] }
 thiserror = { version = "2.0.18" }
 regex = { version = "1.12.3" }
-prettyplease = { version = "0.2.37" }
+prettyplease = { version = "0.3.0" }
 proc-macro2 = { version = "1.0.106" }
 quote = { version = "1.0.45" }
 syn = { version = "2.0.117", features = ["full", "extra-traits"] }
